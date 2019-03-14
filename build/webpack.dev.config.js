@@ -24,6 +24,7 @@ module.exports = {
 				loaders: [
 						{ test: /\.vue$/, loader: 'vue' },
 						{ test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
+						{ test: /\.js$/, loader: 'babel', include: /vue/ },
 						{ test: /\.css$/, loader: 'style!css!autoprefixer'},
 						{ test: /\.less$/, loader: 'style!css!less' },
 						{ test: /\.scss$/, loader: 'style!css!sass?sourceMap'},

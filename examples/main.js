@@ -160,16 +160,6 @@ router.map({
             require(['./routers/notice.vue'], resolve);
         }
     },
-		'/m/city-picker': {
-				component: function (resolve) {
-						require(['./routers/m.city-picker.vue'], resolve);
-				}
-		},
-		'/m/picker': {
-				component: function (resolve) {
-						require(['./routers/m.picker.vue'], resolve);
-				}
-		},
     '*': {
 		    component: function (resolve) {
 				    require(['./routers/notice.vue'], resolve);

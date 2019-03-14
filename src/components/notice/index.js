@@ -1,7 +1,7 @@
 import Notification from '../base/notification';
 
-const prefixCls = 'hex-notice';
-const iconPrefixCls = 'hex-icon';
+const prefixCls = 'ivu-notice';
+const iconPrefixCls = 'ivu-icon';
 const prefixKey = 'hex_notice_key_';
 
 let top = 24;

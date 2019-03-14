@@ -1,5 +1,5 @@
-const prefixCls = 'hex-picker-panel';
-const datePrefixCls = 'hex-date-picker';
+const prefixCls = 'ivu-picker-panel';
+const datePrefixCls = 'ivu-date-picker';
 
 export default {
     methods: {

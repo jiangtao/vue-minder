@@ -24,7 +24,9 @@ module.exports = {
 				// require时省略的扩展名，如：require('module') 不需要module.js
 				extensions: ['', '.js', '.vue'],
 				alias: {
-						hexui: path.join(__dirname, '../src/index.js')
+						hexui: path.join(__dirname, '../src/index.js'),
+						vue: 'vue/dist/vue.common.js'
+						
 				}
 		},
 		module: {
@@ -62,7 +64,8 @@ module.exports = {
 				}),
 				new webpack.optimize.OccurenceOrderPlugin(),
 				new HtmlWebpackPlugin({
-						title: 'Hex UI Components Library'
+						title: 'Hex UI Components Library',
+						prod: true
 				})
 		]
 };

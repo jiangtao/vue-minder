@@ -52,7 +52,6 @@ li + li {
                 <li><a v-link="'/upload'">Upload</a></li>
                 <li><a v-link="'/tree'">Tree</a></li>
                 <li><a v-link="'/notice'">Notice</a></li>
-                <li><a v-link="'/m/city-picker'">Mobile City Picker</a></li>
             </ul>
         </nav>
         <router-view></router-view>

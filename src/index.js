@@ -1,6 +1,3 @@
-// es6 polyfill
-import 'core-js/fn/array/find-index';
-
 import Affix from './components/affix';
 import Alert from './components/alert';
 import BackTop from './components/back-top';
@@ -42,8 +39,6 @@ import Tooltip from './components/tooltip';
 import Transfer from './components/transfer';
 import Tree from './components/tree';
 import Upload from './components/upload';
-import mCityPicker from './components/m.city-picker';
-import mPicker from './components/m.picker';
 import { Row, Col } from './components/layout';
 import { Select, Option, OptionGroup } from './components/select';
 import locale from './locale';
@@ -109,9 +104,7 @@ const hex = {
     Tooltip,
     Transfer,
     Tree,
-    Upload,
-    mCityPicker,
-    mPicker
+    Upload
 };
 
 const install = function (Vue, opts = {}) {

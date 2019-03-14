@@ -1,7 +1,7 @@
 import Notification from '../base/notification';
 
-const prefixCls = 'hex-message';
-const iconPrefixCls = 'hex-icon';
+const prefixCls = 'ivu-message';
+const iconPrefixCls = 'ivu-icon';
 const prefixKey = 'hex_message_key_';
 
 let defaultDuration = 1.5;
@@ -37,7 +37,7 @@ function notice (content, duration = defaultDuration, type, onClose) {
     const iconType = iconTypes[type];
 
     // if loading
-    const loadCls = type === 'loading' ? ' hex-load-loop' : '';
+    const loadCls = type === 'loading' ? ' ivu-load-loop' : '';
 
     let instance = getMessageInstance();
 
