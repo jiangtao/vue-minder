@@ -1,6 +1,6 @@
 {
-  "name": "hexUI",
-  "version": "0.0.1",
+  "name": "hexui",
+  "version": "0.0.3",
   "title": "hexUI",
   "description": "A high quality  UI components Library with Vue.js based on iview1.0",
   "homepage": "https://imjiangtao.com/hexui",
