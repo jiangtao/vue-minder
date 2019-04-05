@@ -1,12 +1,10 @@
 <!--
-issue 仅用于提交 bug 或 feature 及 文档错误，其余疑问恕不作答。提问前请先阅读 https://github.com/jiangtao/hexui/issues 和相关文档后，考虑是否开启issue。
+issue 仅用于提交 bug 或 feature 及 文档错误，其余疑问恕不作答。
  -->
 <!--
 我们十分感谢有价值的 issue 贡献者，所以请填写以下内容。如果提问不符要求、在文档中已有解答、已有相同 issue，我们将直接 close，感谢理解。
  -->
 
-### iView 版本号
-<!-- 0.9.10 -->
 
 ### 操作系统/浏览器 版本号
 <!-- macOS/Chrome 54 -->
