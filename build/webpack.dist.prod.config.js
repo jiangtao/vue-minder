@@ -8,8 +8,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, '../dist'),
         publicPath: '/dist/',
-        filename: 'hexui.min.js',
-        library: 'hexui',
+        filename: 'minder.min.js',
+        library: 'minder',
         libraryTarget: 'umd',
         umdNamedDefine: true
     },

@@ -6,20 +6,20 @@ var autoprefixer = require('gulp-autoprefixer');
 
 // 编译less
 gulp.task('css', function () {
-    gulp.src('../src/styles/index.less')
+    gulp.src('../src/styles/editor.less')
         .pipe(less())
         .pipe(autoprefixer({
             browsers: ['last 2 versions', 'ie > 8']
         }))
         .pipe(cleanCSS())
-        .pipe(rename('hexui.css'))
+        .pipe(rename('minder.css'))
         .pipe(gulp.dest('../dist/styles'));
 });
 
-// 拷贝字体文件
-gulp.task('fonts', function () {
-    gulp.src('../src/styles/common/iconfont/fonts/*.*')
-        .pipe(gulp.dest('../dist/styles/fonts'));
+// 拷贝图片
+gulp.task('images', function () {
+    gulp.src('../src/styles/images/*.*')
+        .pipe(gulp.dest('../dist/styles/images'));
 });
 
-gulp.task('default', ['css', 'fonts']);
+gulp.task('default', ['css', 'images']);
