@@ -1,6 +1,6 @@
 {
   "name": "vue-minder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "title": "Vue kityminder",
   "description": "Vue Kityminder",
   "homepage": "https://github.com/hexyun/vue-minder",
@@ -14,7 +14,7 @@
     "framework",
     "baidu naotu"
   ],
-  "main": "dist/VueMinder.js",
+  "main": "dist/minder.min.js",
   "files": [
     "dist",
     "src"

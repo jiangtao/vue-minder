@@ -51,28 +51,30 @@
 				},
 				ready() {
 						var self = this;
-						var editor = window.editor = new Editor(this.$els.editor);
-						var importData = this.importData;
-						if(typeof importData === 'string') {
-								try {
-										importData = JSON.parse(importData);
-								} catch(e) {
-										importData = JSON.parse(window.localStorage.__dev_minder_content);
-										console.warn('hex minder import data format error');
+						this.$nextTick(() => {
+								var editor = window.editor = new Editor(this.$els.editor);
+								var importData = this.importData;
+								if(typeof importData === 'string') {
+										try {
+												importData = JSON.parse(importData);
+										} catch(e) {
+												importData = JSON.parse(window.localStorage.__dev_minder_content);
+												console.warn('hex minder import data format error');
+										}
 								}
-						}
-						editor.minder.importJson(importData);
+								editor.minder.importJson(importData);
 
-						editor.minder.on('contentchange', function() {
-								var json = editor.minder.exportJson();
-								self.$emit('content-change', json);
-								// window.localStorage.__dev_minder_content = JSON.stringify(json);
+								editor.minder.on('contentchange', function() {
+										var json = editor.minder.exportJson();
+										self.$emit('content-change', json);
+										// window.localStorage.__dev_minder_content = JSON.stringify(json);
+								});
+								window.minder = window.km = editor.minder;
+
+								this.editor = editor;
+								this.minder = minder;
+								if(!this.enable) this.minder.disable();
 						});
-						window.minder = window.km = editor.minder;
-
-						this.editor = editor;
-						this.minder = minder;
-						if(!this.enable) this.minder.disable();
 				},
 				methods: {
 						getExportJson() {

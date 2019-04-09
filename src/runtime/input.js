@@ -60,9 +60,9 @@ define(function(require, exports, module) {
                 }
             });
 
-            minder.on('dblclick', function() {
+            minder.on('dblclick', function(e) {
                 if (minder.getSelectedNode() && minder._status !== 'readonly') {
-                    editText();
+                    editText(e);
                 }
             });
         }
@@ -110,7 +110,7 @@ define(function(require, exports, module) {
          * @Date 2015-12-2
          */
          // edit for the selected node
-        function editText() {
+        function editText(e) {
             var node = minder.getSelectedNode();
             if (!node) {
                 return;
@@ -133,6 +133,7 @@ define(function(require, exports, module) {
                 receiver.fixFFCaretDisappeared();
             };
             fsm.jump('input', 'input-request');
+            minder.fire('editText', e, minder)
             receiver.selectAll();
         }
 

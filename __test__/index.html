@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="../dist/styles/minder.css">
 </head>
 <body>
@@ -10,10 +11,52 @@
 <script src="https://unpkg.com/vue@1.0.28/dist/vue.min.js"></script>
 <script src="../dist/minder.min.js"></script>
 <script>
-    new Vue({
-        el: '#app',
-        template: '<minder></minder>',
-    })
+		new Vue({
+				el: '#app',
+				template: '<minder :import-data="import" v-ref:naotu></minder>',
+				data() {
+						return {
+								import: {
+										'root': {
+												'data': {
+														'id': 'bt83is4rofc0',
+                                                        'pageId': 'aaaaa',
+														'created': 1554689751803,
+														'text': '中心主题'
+												},
+												'children': [
+														{
+																'data': {
+																		'id': 'bt83isz7ueg0',
+																		'created': 1554689753644,
+																		'text': '111'
+																},
+																'children': []
+														},
+														{
+																'data': {
+																		'id': 'bt83iu5x8io0',
+																		'created': 1554689756226,
+																		'text': '222'
+																},
+																'children': []
+														}
+												]
+										},
+										'template': 'default',
+										'theme': 'fresh-blue',
+										'version': '1.4.43'
+								}
+						};
+				},
+				ready: function() {
+						var minder = this.$refs.naotu.minder;
+						minder.on('click', function(e) {
+								console.log(e.minder.getSelectedNode());
+								console.log(e.minder.exportJson());
+						});
+				}
+		});
 </script>
 </body>
 </html>
