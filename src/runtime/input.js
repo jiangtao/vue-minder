@@ -309,11 +309,10 @@ define(function(require, exports, module) {
          */
         function commitInputNode(node, text) {
             try {
-                minder.decodeData('text', text).then(function(json) {
+                minder.decodeData('name', text).then(function(json) {
                     function importText(node, json, minder) {
                         var data = json.data;
-
-                        node.setText(data.text || '');
+                        node.setText(data.name || '');
 
                         var childrenTreeData = json.children || [];
                         for (var i = 0; i < childrenTreeData.length; i++) {

@@ -19,6 +19,13 @@
                         var self = this
 						this.$nextTick(function() {
 								var minder = this.$refs.minder.minder;
+								minder.importJson({
+									root: {
+										data: {
+											name: 'App'
+										}
+									}
+								})
 								var snap = this.snap;
 								// contentchange
 								minder.on('editText', function(e, minder) {

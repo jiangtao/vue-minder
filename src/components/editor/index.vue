@@ -5,7 +5,7 @@
         <div v-el:editor class="minder-editor"></div>
         <div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>
         <div v-if="showNote" class="note-previewer" note-previewer v-if="minder"></div>
-        <div v-if="showNote" class="navigator" navigator minder="minder" v-if="minder"></div>
+        <div v-if="showNavigator" class="navigator" navigator minder="minder" v-if="minder"></div>
     </div>
 </template>
 <script>
@@ -27,6 +27,10 @@
 								default: false
 						},
 						showHotBox: {
+								type: Boolean,
+								default: false
+						},
+						showNavigator: {
 								type: Boolean,
 								default: false
 						},
