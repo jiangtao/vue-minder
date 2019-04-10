@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         minder.renderTo(this.selector);
         minder.setTheme(null);
         minder.select(minder.getRoot(), true);
-        minder.execCommand('text', '中心主题');
+        minder.execCommand('name', '中心主题');
 
         // 导出给其它 Runtime 使用
         this.minder = minder;
