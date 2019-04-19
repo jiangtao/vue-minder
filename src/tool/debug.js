@@ -36,7 +36,6 @@ define(function(require, exports, module) {
             var textStyle = 'background: none; color: black;';
             this.log = function() {
                 var output = format.apply(null, arguments);
-                console.log(format('%c{0}%c{1}', flag, output), flagStyle, textStyle);
             };
         } else {
             this.log = noop;
