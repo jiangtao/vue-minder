@@ -1,21 +1,23 @@
 <template>
   <div class="minder-editor-container">
-    <div v-if="showTopTab" class="top-tab" top-tab="minder" editor="editor" v-if="minder"></div>
-    <div v-if="showSearchBox" search-box minder="minder" v-if="minder"></div>
+    <!--<div v-if="showTopTab" class="top-tab" top-tab="minder" editor="editor" v-if="minder"></div>-->
     <div v-el:editor class="minder-editor"></div>
-    <div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>
-    <div v-if="showNote" class="note-previewer" note-previewer v-if="minder"></div>
+    <!--<div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>-->
+    <!--<div v-if="showNote" class="note-previewer" note-previewer v-if="minder"></div>-->
     <Navigator v-if="lazyNavigator && showNavigator" class="navigator"></Navigator>
+    <Search v-if="lazySearch && showSearchBox" class="search__box">111</Search>
   </div>
 </template>
 <script>
   import Editor from '../../editor';
   import Navigator from '../navigator/index';
+  import Search from '../search/index'
 
   export default {
     name: 'mind-editor',
     components: {
-      Navigator
+      Navigator,
+      Search
     },
     props: {
       showTopTab: {
@@ -24,7 +26,7 @@
       },
       showSearchBox: {
         type: Boolean,
-        default: false
+        default: true
       },
       showNote: {
         type: Boolean,
@@ -48,7 +50,8 @@
       return {
         editor: null,
         minder: null,
-        lazyNavigator: false
+        lazyNavigator: false,
+        lazySearch: false
       };
     },
     watch: {
@@ -84,6 +87,7 @@
         if(!this.enable) this.minder.disable();
         
         this.lazyNavigator = true
+        this.lazySearch = true
       });
     },
     methods: {

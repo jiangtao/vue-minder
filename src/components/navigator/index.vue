@@ -112,13 +112,9 @@
     data() {
       return {
         isNavOpen: false,
-        zoomInCls: {},
         originStyle: {},
         zoom: 100,
         minder: null,
-        indicatorStyle: {},
-        zoomOutCls: {},
-        handCls: {},
         view: null,
         contentview: null,
         paper: null
@@ -160,7 +156,20 @@
       }
     },
     computed: {
+      handCls() {
+        if(!this.minder) return {} 
+        return { 'active' : this.execState('hand') == 1 }
+      },
+      zoomInCls() {
+        if(!this.minder) return {}
+        return {active: this.getZoomRadio(this.zoom) == 0}
+      },
+      zoomOutCls() {
+        if(!this.minder) return {}
+        return { 'active' : this.getZoomRadio(this.zoom) == 1 }
+      },
       indicatorStyle() {
+        if(!this.minder) return {}
         return {
           'transform': 'translate(0, ' + this.getHeight(this.zoom) + 'px)',
           'transition': 'transform 200ms'
@@ -174,10 +183,7 @@
         const scope = this;
         const minder = this.minder;
         window.minder.setDefaultOptions({zoom: config.get('zoom')});
-        this.zoomInCls = {active: this.getZoomRadio(this.zoom) == 0};
         this.originStyle = {'transform': 'translate(0, ' + this.getHeight(100) + 'px)'}
-        this.zoomOutCls = { 'active' : this.getZoomRadio(this.zoom) == 1 }
-        this.handCls = { 'active' : this.execState('hand') == 1 }
 
         scope.isNavOpen = !memory.get('navigator-hidden');
 
