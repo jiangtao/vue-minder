@@ -47,10 +47,10 @@
 
   function bind(minder, ctx) {
     minder.on('layout layoutallfinish', () => {
-      updateContentView(minder, ctx)
+      updateContentView(minder, ctx);
     });
     minder.on('viewchange', () => {
-      updateVisibleView(minder, ctx)
+      updateVisibleView(minder, ctx);
     });
   }
 
@@ -125,7 +125,7 @@
         this.minder.execCommand.apply(this.minder, arguments);
       },
       execState(v) {
-        return this.minder.queryCommandState(v)
+        return this.minder.queryCommandState(v);
       },
       getZoomRadio(value) {
         var zoomStack = this.minder.getOption('zoom');
@@ -157,33 +157,33 @@
     },
     computed: {
       handCls() {
-        if(!this.minder) return {} 
-        return { 'active' : this.execState('hand') == 1 }
+        if(!this.minder) return {};
+        return {'active': this.execState('hand') == 1};
       },
       zoomInCls() {
-        if(!this.minder) return {}
-        return {active: this.getZoomRadio(this.zoom) == 0}
+        if(!this.minder) return {};
+        return {active: this.getZoomRadio(this.zoom) == 0};
       },
       zoomOutCls() {
-        if(!this.minder) return {}
-        return { 'active' : this.getZoomRadio(this.zoom) == 1 }
+        if(!this.minder) return {};
+        return {'active': this.getZoomRadio(this.zoom) == 1};
       },
       indicatorStyle() {
-        if(!this.minder) return {}
+        if(!this.minder) return {};
         return {
           'transform': 'translate(0, ' + this.getHeight(this.zoom) + 'px)',
           'transition': 'transform 200ms'
-        }
+        };
       }
     },
     ready() {
       this.$nextTick(() => {
-        const ctx = this
-        this.minder = window.minder
+        const ctx = this;
+        this.minder = window.minder;
         const scope = this;
         const minder = this.minder;
         window.minder.setDefaultOptions({zoom: config.get('zoom')});
-        this.originStyle = {'transform': 'translate(0, ' + this.getHeight(100) + 'px)'}
+        this.originStyle = {'transform': 'translate(0, ' + this.getHeight(100) + 'px)'};
 
         scope.isNavOpen = !memory.get('navigator-hidden');
 
@@ -208,7 +208,7 @@
 
         // 画布，渲染缩略图
         this.paper = new kity.Paper(this.$els.navPreviewer);
-        var paper = this.paper
+        var paper = this.paper;
 
         // 用两个路径来挥之节点和连线的缩略图
         var nodeThumb = this.nodeThumb = paper.put(new kity.Path());
@@ -273,7 +273,8 @@
           paper.on('mousedown', function(e) {
             dragging = true;
             moveView(e.getPosition('top'), 200);
-            ctx.$els.navPreviewer.classList.add('grab')
+            if(ctx.$els.navPreviewer)
+              ctx.$els.navPreviewer.classList.add('grab');
           });
 
           paper.on('mousemove', function(e) {
@@ -283,8 +284,9 @@
           });
           window.addEventListener('mouseup', () => {
             dragging = false;
-            ctx.$els.navPreviewer.classList.remove('grab')
-          })
+            if(ctx.$els.navPreviewer)
+              ctx.$els.navPreviewer.classList.remove('grab');
+          });
         }
       });
     }

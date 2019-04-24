@@ -1,30 +1,47 @@
 <template>
   <div class="minder-editor-container">
-    <!--<div v-if="showTopTab" class="top-tab" top-tab="minder" editor="editor" v-if="minder"></div>-->
-    <div v-el:editor class="minder-editor"></div>
+    <div v-if="lazy && showTopTab" class="top-tab minder-top-tab">
+      <template-list v-if="lazy && showTemplate" class="template__list inline-directive"></template-list>
+      <theme-list class="theme-list" v-if="lazy && showTheme"></theme-list>
+      <search v-if="lazy && showSearchBox" class="search__box"></search>
+    </div>
+    <div v-el:editor class="minder-editor" :style="editorStyle"></div>
     <!--<div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>-->
     <!--<div v-if="showNote" class="note-previewer" note-previewer v-if="minder"></div>-->
-    <Navigator v-if="lazyNavigator && showNavigator" class="navigator"></Navigator>
-    <Search v-if="lazySearch && showSearchBox" class="search__box">111</Search>
+    <navigator v-if="lazy && showNavigator" class="navigator"></navigator>
   </div>
 </template>
+<style>
+  .template__list,
+  .theme__panel{
+    float: left;
+  }
+</style>
 <script>
   import Editor from '../../editor';
   import Navigator from '../navigator/index';
   import Search from '../search/index'
+  import TemplateList from '../template-list/index'
+  import ThemeList from '../theme-list/index'
 
   export default {
     name: 'mind-editor',
     components: {
       Navigator,
-      Search
+      Search,
+      TemplateList,
+      ThemeList
     },
     props: {
-      showTopTab: {
-        type: Boolean,
-        default: false
-      },
       showSearchBox: {
+        type: Boolean,
+        default: true
+      },
+      showTemplate: {
+        type: Boolean,
+        default: true
+      },
+      showTheme: {
         type: Boolean,
         default: true
       },
@@ -50,9 +67,18 @@
       return {
         editor: null,
         minder: null,
-        lazyNavigator: false,
-        lazySearch: false
+        lazy: false
       };
+    },
+    computed: {
+      showTopTab(){
+        return this.showSearchBox || this.showTheme || this.showTemplate
+      },
+      editorStyle() {
+        return {
+          top: this.showTopTab ? '57px !important' : '0 !important'
+        }
+      }
     },
     watch: {
       enable(val, old) {
@@ -86,8 +112,7 @@
         this.minder = minder;
         if(!this.enable) this.minder.disable();
         
-        this.lazyNavigator = true
-        this.lazySearch = true
+        this.lazy = true
       });
     },
     methods: {
