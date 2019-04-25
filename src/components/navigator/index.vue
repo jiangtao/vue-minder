@@ -3,7 +3,7 @@
     <div class="nav-bar">
       <div class="nav-btn zoom-in"
            @click="exec('zoomIn')"
-           title="zoom-in"
+           title="{{ 'zoom-in' | ml 'ui' }}"
            :class="zoomInCls">
         <div class="icon"></div>
       </div>
@@ -16,25 +16,31 @@
       </div>
       <div class="nav-btn zoom-out"
            @click="exec('zoomOut')"
-           title="zoom-out"
+           title="{{ 'zoom-out' | ml 'ui' }}"
            :class="zoomOutCls">
         <div class="icon"></div>
       </div>
       <div class="nav-btn hand"
            @click="exec('hand')"
-           title="hand"
+           title="{{ 'hand' | ml 'ui' }}"
            :class="handCls">
         <div class="icon"></div>
       </div>
       <div class="nav-btn camera"
            @click="exec('camera', minder.getRoot(), 600)"
-           title="camera">
+           title="{{ 'camera' | ml 'ui' }}">
         <div class="icon"></div>
       </div>
       <div class="nav-btn nav-trigger"
            :class="{'active' : isNavOpen}"
            @click="toggleNavOpen()"
-           title="navigator">
+           title="{{ 'navigator' | ml 'ui' }}">
+        <div class="icon"></div>
+      </div>
+      <div class="nav-btn nav-trigger"
+           :class="{'active' : isTopOpen}"
+           @click="toggleTop()"
+           title="{{ 'topbar' | ml 'ui' }}">
         <div class="icon"></div>
       </div>
     </div>
@@ -112,6 +118,7 @@
     data() {
       return {
         isNavOpen: false,
+        isTopOpen: false,
         originStyle: {},
         zoom: 100,
         minder: null,
@@ -141,6 +148,10 @@
       getHeight(value) {
         var totalHeight = this.getCss(this.$els.zoomPan, 'height');
         return this.getZoomRadio(value) * totalHeight;
+      },
+      toggleTop() {
+        this.isTopOpen = !this.isTopOpen;
+        this.$emit('open-top', this.isTopOpen)
       },
       toggleNavOpen() {
         this.isNavOpen = !this.isNavOpen;

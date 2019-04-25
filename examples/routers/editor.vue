@@ -1,11 +1,6 @@
 <template>
   <minder :enable="enable" v-ref:minder :style="defaultStyle"></minder>
 </template>
-<style>
-  .minder-editor{
-    top: 57px !important;
-  }
-</style>
 <script>
   export default {
     data() {

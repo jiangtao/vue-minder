@@ -1,14 +1,18 @@
 <template>
   <div class="minder-editor-container">
-    <div v-if="lazy && showTopTab" class="top-tab minder-top-tab">
+    <div v-if="lazy && showTopTab && showTop" class="top-tab minder-top-tab minder__top-tab">
       <template-list v-if="lazy && showTemplate" class="template__list inline-directive"></template-list>
       <theme-list class="theme-list" v-if="lazy && showTheme"></theme-list>
       <search v-if="lazy && showSearchBox" class="search__box"></search>
     </div>
-    <div v-el:editor class="minder-editor" :style="editorStyle"></div>
+    <div v-el:editor class="minder-editor"></div>
     <!--<div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>-->
     <!--<div v-if="showNote" class="note-previewer" note-previewer v-if="minder"></div>-->
-    <navigator v-if="lazy && showNavigator" class="navigator"></navigator>
+    <navigator 
+      @open-top="openTop"
+      v-if="lazy && showNavigator" 
+      class="navigator">
+    </navigator>
   </div>
 </template>
 <style>
@@ -16,8 +20,13 @@
   .theme__panel{
     float: left;
   }
+  .minder__top-tab{
+    position: relative;
+    z-index: 3;
+  }
 </style>
 <script>
+  import '../../filter/lang'
   import Editor from '../../editor';
   import Navigator from '../navigator/index';
   import Search from '../search/index'
@@ -67,17 +76,13 @@
       return {
         editor: null,
         minder: null,
-        lazy: false
+        lazy: false,
+        showTop: true
       };
     },
     computed: {
       showTopTab(){
         return this.showSearchBox || this.showTheme || this.showTemplate
-      },
-      editorStyle() {
-        return {
-          top: this.showTopTab ? '57px !important' : '0 !important'
-        }
       }
     },
     watch: {
@@ -116,13 +121,15 @@
       });
     },
     methods: {
+      openTop(show) {
+        this.showTop = show
+      },
       getExportJson() {
         return this.minder.exportJson();
       },
       getSelectedNode() {
         return this.minder.getSelectedNode();
       },
-
       getSelectedNodes() {
         return this.minder.getSelectedNode();
       }

@@ -25,7 +25,6 @@
   }
 </style>
 <script>
-  import '../../filter/lang'
   export default {
     props: {},
     data() {
