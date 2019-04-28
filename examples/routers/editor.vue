@@ -161,20 +161,23 @@ export default {
       minder.setOption('project_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/project.png')
       minder.setOption('page_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/page.png')
       minder.setOption('dir_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/dir.png')
-      console.log(1111)
       setTimeout(() => {
         minder.importJson(appNode);
       }, 1000);
       var snap = this.snap;
       minder.on("editText", function(e, minder) {
         var node = e.minder.getSelectedNode();
-        console.log(e, node);
       });
       // 只有选中的时候会触发
       minder.on("selectionchange", function(e) {
         self.minder = e.minder;
         var node = e.minder.getSelectedNode();
         self.currentNode = node;
+        if(node && node.parent) {
+          setTimeout(function(){
+            node.parent.layout()
+          }, 0)
+        }
         if (self.lock && node) {
         }
         self.lock = true;
@@ -182,7 +185,6 @@ export default {
 
       minder.on("beforeExecCommand", function(e) {
         var node = e.minder.getSelectedNode();
-        console.log(node);
         if (/append/i.test(e.commandName)) {
           console.log("add", node);
           self.snap[node.data.id] = node;

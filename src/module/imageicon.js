@@ -121,7 +121,6 @@ module.exports = Module.register('imageicon', function() {
         dir: self.getOption('dir_url'),
         page: self.getOption('page_url')
       };
-      console.log(urls)
       
       if(type && urls[type]) {
         size = size || {width: HEX_WIDTH, height: HEX_HEIGHT};
