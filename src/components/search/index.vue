@@ -1,5 +1,5 @@
 <template>
-  <div id="search" class="search-box clearfix">
+  <div v-show="showSearch" id="search" class="search-box clearfix">
     <div class="input-group input-group-sm search-input-wrap">
       <input type="text"
              v-el:search-input
@@ -26,10 +26,18 @@
 </template>
 <script>
   export default {
-    props: {
-    },
+    props: {},
     data() {
-      return {keyword: '', showTip: false, curIndex: 0, resultNum: 0, searchSequence: [], nodeSequence: [], direction: 'next'};
+      return {
+        keyword: '',
+        showTip: false,
+        curIndex: 0,
+        resultNum: 0,
+        searchSequence: [],
+        nodeSequence: [],
+        direction: 'next',
+        showSearch: this.$parent.showSearch
+      };
     },
     methods: {
       handleKeyDown(e) {
@@ -57,6 +65,7 @@
         }
       },
       doSearch(type) {
+        var self = this
         var keyword = this.keyword.toLowerCase();
         this.showTip = false;
         this.minder.fire('hidenoterequest');
@@ -79,15 +88,14 @@
         if(newSearch) {
           this._makeSearchSequence(keyword);
         }
-        
+
         this.resultNum = this.searchSequence.length;
 
         if(this.searchSequence.length) {
           var curIndex = newSearch ? 0 : (this.direction === 'next' ? this.doSearch.lastIndex + 1 : this.doSearch.lastIndex - 1) || 0;
           curIndex = (this.searchSequence.length + curIndex) % this.searchSequence.length;
-
           setSearchResult(this.searchSequence[curIndex].node, this.searchSequence[curIndex].keyword, this.minder);
-
+          
           this.doSearch.lastIndex = curIndex;
 
           this.curIndex = curIndex + 1;
@@ -96,7 +104,14 @@
             minder.execCommand('camera', node, 50);
             setTimeout(function() {
               minder.select(node, true);
-              if(!node.isExpanded()) minder.execCommand('expand', true);
+              if(!node.isExpanded()) {
+                while (node.parent) {
+                  node.expand();
+                  node = node.parent;
+                }
+                node.renderTree();
+                self.minder.layout(100);
+              }
               if(previewKeyword) {
                 minder.fire('shownoterequest', {node: node, keyword: previewKeyword});
               }
@@ -105,6 +120,17 @@
         }
       },
       exitSearch() {
+        this.$els.searchInput.blur();
+        minder.fire('hidenoterequest');
+      },
+      enterSearch() {
+        this.showSearch = true
+        this.$nextTick(() => {
+          this.$els.searchInput.focus();
+          if(this.keyword) {
+            this.$els.searchInput.setSelectionRange(0, this.keyword.length);
+          }
+        })
       },
       getNodes() {
         this.nodeSequence = [];
@@ -115,10 +141,18 @@
     },
     ready() {
       this.$nextTick(() => {
-        this.minder = window.minder
-        this.getNodes()
+        this.minder = window.minder;
+        this.getNodes();
         this.minder.on('contentchange', () => {
-          this.getNodes()
+          this.getNodes();
+        });
+        this.minder.on('searchNode', () => this.enterSearch());
+
+        document.body.addEventListener('keydown', e => {
+          if(e.keyCode == 70 && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+            this.enterSearch();
+            e.preventDefault();
+          }
         });
       });
     }

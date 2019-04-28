@@ -3,7 +3,7 @@
     <div v-if="lazy && showTopTab && showTop" class="top-tab minder-top-tab minder__top-tab">
       <template-list v-if="lazy && showTemplate" class="template__list inline-directive"></template-list>
       <theme-list class="theme-list" v-if="lazy && showTheme"></theme-list>
-      <search v-if="lazy && showSearchBox" class="search__box"></search>
+      <search v-if="lazy" class="search__box"></search>
     </div>
     <div v-el:editor class="minder-editor"></div>
     <!--<div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>-->
@@ -44,7 +44,7 @@
     props: {
       showSearchBox: {
         type: Boolean,
-        default: true
+        default: false
       },
       showTemplate: {
         type: Boolean,
@@ -77,12 +77,13 @@
         editor: null,
         minder: null,
         lazy: false,
-        showTop: true
+        showTop: true,
+        showSearch: this.showSearchBox
       };
     },
     computed: {
       showTopTab(){
-        return this.showSearchBox || this.showTheme || this.showTemplate
+        return this.showSearch || this.showTheme || this.showTemplate
       }
     },
     watch: {

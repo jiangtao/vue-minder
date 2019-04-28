@@ -118,7 +118,7 @@
     data() {
       return {
         isNavOpen: false,
-        isTopOpen: false,
+        isTopOpen: this.$parent.showTop && this.$parent.showTopTab,
         originStyle: {},
         zoom: 100,
         minder: null,

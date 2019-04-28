@@ -1,6 +1,7 @@
 import kity from 'kity';
 import kityminder from 'kityminder-core';
 import Editor from './components/editor';
+import './module/imageicon'
 
 const MindEditor = {
   Minder: Editor
