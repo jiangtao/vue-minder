@@ -39,11 +39,11 @@ npm install vue-minder
 - enable 禁用或编辑模式
 - import-data 导入的数据
 
-具体开发可参考 [./examples]
+[具体使用可参考](./examples)
 
 ## 与百度脑图不同之处
 
-- text 改为 name
+- 数据中的字段 text 改为 name
        
 ## 开发和贡献
 
