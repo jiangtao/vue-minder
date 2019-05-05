@@ -5,7 +5,7 @@
 
 --- 
 
-Vue Minder 基于百度脑图核心代码[kityminder-core](https://github.com/fex-team/kityminder-core)和[kityminder-editor](https://github.com/fex-team/kityminder-editor)做的二次开发，主要满足在Vue项目中开发和使用。感谢[FEX Team](https://github.com/fex-team)
+Vue Minder 基于百度脑图核心代码[kityminder-core](https://github.com/fex-team/kityminder-core)，主要满足在Vue项目中开发和使用。感谢[FEX Team](https://github.com/fex-team)
 
 ## 安装
 
