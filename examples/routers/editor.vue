@@ -157,10 +157,10 @@ export default {
 
     this.$nextTick(function() {
       var minder = this.$refs.minder.minder;
-      minder.setOption('app_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/app.png')
-      minder.setOption('project_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/project.png')
-      minder.setOption('page_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/page.png')
-      minder.setOption('dir_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/dir.png')
+      // minder.setOption('app_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/app.png')
+      // minder.setOption('project_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/project.png')
+      // minder.setOption('page_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/page.png')
+      // minder.setOption('dir_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/dir.png')
       setTimeout(() => {
         minder.importJson(appNode);
       }, 1000);

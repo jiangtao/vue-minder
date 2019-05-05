@@ -20,7 +20,7 @@
     "src"
   ],
   "scripts": {
-    "dev": "npm run build:style &&  npm run copy:example && webpack-dev-server --content-base examples/ --open --inline --hot --compress --history-api-fallback  --port 8081 --config build/webpack.dev.config.js",
+    "dev": "npm run build:style &&  npm run copy:example && webpack-dev-server --content-base examples/ --open --inline --hot --compress --history-api-fallback  --port 10000 --config build/webpack.dev.config.js",
     "build:style": "gulp --gulpfile build/build-style.js",
     "docs": "webpack --config build/webpack.docs.config.js && npm run copy:docs",
     "build:prod": "npm run build:style && webpack --config build/webpack.dist.prod.config.js",

@@ -36,7 +36,8 @@
         searchSequence: [],
         nodeSequence: [],
         direction: 'next',
-        showSearch: this.$parent.showSearch
+        showSearch: this.$parent.showSearch,
+        minder: null
       };
     },
     methods: {

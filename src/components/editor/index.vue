@@ -4,6 +4,7 @@
       <template-list v-if="lazy && showTemplate" class="template__list inline-directive"></template-list>
       <theme-list class="theme-list" v-if="lazy && showTheme"></theme-list>
       <search v-if="lazy" class="search__box"></search>
+      <breadcrumb v-if="lazy && showBreadcrumb && !enable" class="breadcrumb__box"></breadcrumb>
     </div>
     <div v-el:editor class="minder-editor"></div>
     <!--<div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>-->
@@ -32,6 +33,7 @@
   import Search from '../search/index'
   import TemplateList from '../template-list/index'
   import ThemeList from '../theme-list/index'
+  import Breadcrumb from '../breadcrumb/index'
 
   export default {
     name: 'mind-editor',
@@ -39,7 +41,8 @@
       Navigator,
       Search,
       TemplateList,
-      ThemeList
+      ThemeList,
+      Breadcrumb
     },
     props: {
       showSearchBox: {
@@ -62,6 +65,10 @@
         type: Boolean,
         default: false
       },
+      showBreadcrumb: {
+        type: Boolean,
+        default: true
+      },
       showNavigator: {
         type: Boolean,
         default: true
@@ -83,7 +90,7 @@
     },
     computed: {
       showTopTab(){
-        return this.showSearch || this.showTheme || this.showTemplate
+        return this.showSearch || this.showTheme || this.showTemplate || this.showBreadcrumb
       }
     },
     watch: {
@@ -117,7 +124,6 @@
         this.editor = editor;
         this.minder = minder;
         if(!this.enable) this.minder.disable();
-        
         this.lazy = true
       });
     },
