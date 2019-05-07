@@ -1,7 +1,6 @@
 <template>
   <ul class="breadcrumb__list">
     <li v-for="(index, item) in list">
-      {{item.data.id}}
       <span :id="item.data.id" @click="showNode(item, $event)" class="item">{{item.data.name}}</span>
       <span v-if="index !== list.length - 1" class="arrow">&gt;</span>
     </li>
@@ -42,35 +41,38 @@
 </style>
 <script>
   export default {
-    props: {},
+    props: {
+      uniqueIndexFn: {
+        type: Function,
+        default: function indexFunc(node) {
+          return node.getData('id') || node.getData('_id') || node.getText();
+        }
+      }
+    },
     data() {
       return {
         list: [],
         minder: null,
-        target: null,
         root: null,
-        nodes: {}
+        nodes: {},
+        lock: false
       };
     },
     ready() {
       this.$nextTick(() => {
         this.minder = window.minder;
-
         this.minder.on('contentchange', (node) => {
-          console.log('content change')
-          this.root = this.minder.getRoot()
-          this.getNodes(this.root)
+          this.root = this.minder.getRoot();
+          this.getNodes(this.root);
         });
         this.minder.on('selectionchange', () => {
-          this.target = null;
-          // console.log(this.minder.getSelectedNode())
+          // nothing
         });
         this.minder.on('dblclick', () => {
           const n = this.minder.getSelectedNode();
           if(n && !n.isLeaf() && n != this.root) {
-            this.target = n;
-            this.list = this.getBreadcrumb(this.target);
-            this.importRoot(this.target);
+            this.getBreadcrumb(n);
+            this.importRoot(n);
           }
         });
       });
@@ -78,24 +80,27 @@
     methods: {
       getNodes(node) {
         node.traverse(n => {
-          this.nodes[n.data.id] = n.clone()
-        })
-      },
-      patch(node) {
-        
+          var uniqueKey = this.uniqueIndexFn(n);
+          if(uniqueKey) this.nodes[uniqueKey] = n.clone();
+        });
+        this.lock = true
       },
       getBreadcrumb(node) {
-        var list = [], cloned
+        var list = [], cloned;
         while(node && node.parent) {
-          cloned = node.parent.clone()
-          list.unshift(cloned);
+          list.unshift(node.parent.clone());
           node = node.parent;
         }
+        this.list = list;
         return list;
       },
       showNode(node, e) {
-        console.log(e.target.id, this.nodes[node.data.id])
-        this.importRoot(this.nodes[node.data.id]);
+        const uid = this.uniqueIndexFn(node)
+        if(uid) {
+          this.importRoot(this.nodes[uid])
+        } else {
+          console.log('check unique key function');
+        }
       },
       importRoot(node) {
         if(!node) return;
@@ -104,17 +109,18 @@
         while(root.getChildren().length) {
           this.minder.removeNode(root.getChildren()[0]);
         }
-        console.log('be', root.data.id);
+        if(!node.isExpanded()) node.expand();
+
         this.minder.importNode(root, node);
-        console.log('af', root.data.id);
+        // node.data.expandState = 'expand'
+        // this.minder.importJson({root: node});
         this.minder.select(root, true);
-        if (!root.isExpanded()) root.expand()
-        this.minder.refresh()
+        this.minder.refresh();
+        this.lock = true;
       }
     },
     beforeDestroy() {
       this.nodes = {};
-      this.target = null;
       this.list = [];
     }
   };

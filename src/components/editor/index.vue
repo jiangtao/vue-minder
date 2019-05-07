@@ -4,36 +4,36 @@
       <template-list v-if="lazy && showTemplate" class="template__list inline-directive"></template-list>
       <theme-list class="theme-list" v-if="lazy && showTheme"></theme-list>
       <search v-if="lazy" class="search__box"></search>
-      <breadcrumb v-if="lazy && showBreadcrumb && !enable" class="breadcrumb__box"></breadcrumb>
+      <breadcrumb :unique-index-fn="uniqueIndexFn" v-if="lazy && showBreadcrumb && !enable"
+                  class="breadcrumb__box"></breadcrumb>
     </div>
     <div v-el:editor class="minder-editor"></div>
-    <!--<div v-if="showNote" class="km-note" note-editor minder="minder" v-if="minder"></div>-->
-    <!--<div v-if="showNote" class="note-previewer" note-previewer v-if="minder"></div>-->
-    <navigator 
+    <navigator
       @open-top="openTop"
-      v-if="lazy && showNavigator" 
+      v-if="lazy && showNavigator"
       class="navigator">
     </navigator>
   </div>
 </template>
 <style>
   .template__list,
-  .theme__panel{
+  .theme__panel {
     float: left;
   }
-  .minder__top-tab{
+
+  .minder__top-tab {
     position: relative;
     z-index: 3;
   }
 </style>
 <script>
-  import '../../filter/lang'
+  import '../../filter/lang';
   import Editor from '../../editor';
   import Navigator from '../navigator/index';
-  import Search from '../search/index'
-  import TemplateList from '../template-list/index'
-  import ThemeList from '../theme-list/index'
-  import Breadcrumb from '../breadcrumb/index'
+  import Search from '../search/index';
+  import TemplateList from '../template-list/index';
+  import ThemeList from '../theme-list/index';
+  import Breadcrumb from '../breadcrumb/index';
 
   export default {
     name: 'mind-editor',
@@ -48,6 +48,9 @@
       showSearchBox: {
         type: Boolean,
         default: false
+      },
+      uniqueIndexFn: {
+        type: Function
       },
       showTemplate: {
         type: Boolean,
@@ -83,14 +86,14 @@
       return {
         editor: null,
         minder: null,
-        lazy: false,
+        lazy: false, // confirm the minder is loaded
         showTop: true,
         showSearch: this.showSearchBox
       };
     },
     computed: {
-      showTopTab(){
-        return this.showSearch || this.showTheme || this.showTemplate || this.showBreadcrumb
+      showTopTab() {
+        return this.showSearch || this.showTheme || this.showTemplate || this.showBreadcrumb;
       }
     },
     watch: {
@@ -118,18 +121,17 @@
         editor.minder.on('contentchange', function() {
           var json = editor.minder.exportJson();
           self.$emit('content-change', json);
-          // window.localStorage.__dev_minder_content = JSON.stringify(json);
         });
         window.minder = window.km = editor.minder;
         this.editor = editor;
         this.minder = minder;
         if(!this.enable) this.minder.disable();
-        this.lazy = true
+        this.lazy = true;
       });
     },
     methods: {
       openTop(show) {
-        this.showTop = show
+        this.showTop = show;
       },
       getExportJson() {
         return this.minder.exportJson();
@@ -140,7 +142,6 @@
       getSelectedNodes() {
         return this.minder.getSelectedNode();
       }
-    },
-
+    }
   };
 </script>
