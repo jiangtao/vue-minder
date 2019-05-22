@@ -39,6 +39,7 @@
   const EXPAND_MEMORY = '__EXPAND_MEMORY__';
   const THEME_MEMORY = '__THEME_MEMORY__';
   const TEMPLATE_MEMORY = '__TEMPLATE_MEMORY__';
+  const SELECTED_MEMORY = '__SELECTED_MEMORY__';
 
   export default {
     name: 'mind-editor',
@@ -105,7 +106,8 @@
         memory: {},
         themeMemory: `${THEME_MEMORY}${this.memorySuffix}`,
         templateMemory: `${TEMPLATE_MEMORY}${this.memorySuffix}`,
-        expandMemory: `${EXPAND_MEMORY}${this.memorySuffix}`
+        expandMemory: `${EXPAND_MEMORY}${this.memorySuffix}`,
+        selectedMemory: `${SELECTED_MEMORY}${this.memorySuffix}`
       };
     },
     computed: {
@@ -133,12 +135,13 @@
             console.warn('hex minder import data format error');
           }
         }
-        console.log(importData)
+        
         editor.minder.importJson(this.getMemory(importData));
         editor.minder.on('contentchange', function() {
           var json = editor.minder.exportJson();
           self.$emit('content-change', json);
         });
+        // editor.minder.on('import', () => this.selectNodes())
         window.minder = window.km = editor.minder;
         this.editor = editor;
         this.minder = minder;
@@ -147,6 +150,18 @@
       });
     },
     methods: {
+      selectNodes() {
+        let selectedNodes = [], id
+        let selecteds = memory.get(this.selectedMemory)
+        if(!selecteds.length) return
+        this.minder.getRoot().traverse(node => {
+          if(id = this.uniqueIndexFn(node)) {
+            selecteds.indexOf(id) > -1 && selectedNodes.push(node)
+          }
+        })
+        this.minder.select(selectedNodes, true)
+        selecteds.length = 0
+      },
       getMemory(data) {
         if(!data) return
         const expands = this.get();
@@ -157,20 +172,23 @@
         data.theme = theme
         
         const walk = (node, expands, level = 0) => {
-          if(level === 0) {
-            node.data.expandState = 'expand'
-          } else {
-            node.data.expandState =  expands[this.uniqueIndexFn(node)] ? 'expand' : 'collapse'
+          if(node && node.data) {
+            if(level === 0) {
+              node.data.expandState = 'expand'
+            } else {
+              node.data.expandState =  expands[this.uniqueIndexFn(node)] ? 'expand' : 'collapse'
+            }
           }
           if(Array.isArray(node.children)) node.children.forEach(n => walk(n, expands, level + 1))
         }
         walk(data.root, expands, 0);
-        
         return data
       },
       setMemory() {
         memory.set(this.templateMemory, this.minder.getTemplate());
         memory.set(this.themeMemory, this.minder.getTheme());
+        const selecteds = this.minder.getSelectedNodes().map(this.uniqueIndexFn)
+        memory.set(this.selectedMemory, selecteds)
         this.minder.getRoot().traverse(n => {
           const k = this.uniqueIndexFn(n);
           // fix: confirm unique index always exists
