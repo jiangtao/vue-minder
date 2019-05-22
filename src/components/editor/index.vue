@@ -29,11 +29,16 @@
 <script>
   import '../../filter/lang';
   import Editor from '../../editor';
-  import Navigator from '../navigator/index';
-  import Search from '../search/index';
-  import TemplateList from '../template-list/index';
-  import ThemeList from '../theme-list/index';
-  import Breadcrumb from '../breadcrumb/index';
+  import Navigator from '../navigator/index.vue';
+  import Search from '../search/index.vue';
+  import TemplateList from '../template-list/index.vue';
+  import ThemeList from '../theme-list/index.vue';
+  import Breadcrumb from '../breadcrumb/index.vue';
+  import memory from '../../services/memory';
+
+  const EXPAND_MEMORY = '__EXPAND_MEMORY__';
+  const THEME_MEMORY = '__THEME_MEMORY__';
+  const TEMPLATE_MEMORY = '__TEMPLATE_MEMORY__';
 
   export default {
     name: 'mind-editor',
@@ -70,9 +75,13 @@
       },
       showBreadcrumb: {
         type: Boolean,
-        default: true
+        default: false
       },
       showNavigator: {
+        type: Boolean,
+        default: true
+      },
+      remember: {
         type: Boolean,
         default: true
       },
@@ -80,6 +89,10 @@
       enable: {
         default: true,
         type: Boolean
+      },
+      memorySuffix: {
+        default: '',
+        type: String
       }
     },
     data() {
@@ -88,7 +101,11 @@
         minder: null,
         lazy: false, // confirm the minder is loaded
         showTop: true,
-        showSearch: this.showSearchBox
+        showSearch: this.showSearchBox,
+        memory: {},
+        themeMemory: `${THEME_MEMORY}${this.memorySuffix}`,
+        templateMemory: `${TEMPLATE_MEMORY}${this.memorySuffix}`,
+        expandMemory: `${EXPAND_MEMORY}${this.memorySuffix}`
       };
     },
     computed: {
@@ -116,8 +133,8 @@
             console.warn('hex minder import data format error');
           }
         }
-        editor.minder.importJson(importData);
-
+        console.log(importData)
+        editor.minder.importJson(this.getMemory(importData));
         editor.minder.on('contentchange', function() {
           var json = editor.minder.exportJson();
           self.$emit('content-change', json);
@@ -130,6 +147,57 @@
       });
     },
     methods: {
+      getMemory(data) {
+        if(!data) return
+        const expands = this.get();
+        if(!expands || Object.keys(expands).length === 0) return data;
+        const template =  memory.get(this.templateMemory)
+        const theme =  memory.get(this.themeMemory)
+        data.template = template
+        data.theme = theme
+        
+        const walk = (node, expands, level = 0) => {
+          if(level === 0) {
+            node.data.expandState = 'expand'
+          } else {
+            node.data.expandState =  expands[this.uniqueIndexFn(node)] ? 'expand' : 'collapse'
+          }
+          if(Array.isArray(node.children)) node.children.forEach(n => walk(n, expands, level + 1))
+        }
+        walk(data.root, expands, 0);
+        
+        return data
+      },
+      setMemory() {
+        memory.set(this.templateMemory, this.minder.getTemplate());
+        memory.set(this.themeMemory, this.minder.getTheme());
+        this.minder.getRoot().traverse(n => {
+          const k = this.uniqueIndexFn(n);
+          // fix: confirm unique index always exists
+          if(k) {
+            if(n.isExpanded()) {
+              this.set(k, n.isExpanded() ? 1 : 0)  
+            } else {
+              if(this.get(k)) this.delete(k)
+            }
+          }
+        });
+      },
+      delete(k) {
+        const data = memory.get(this.expandMemory) || {};
+        delete data[k]
+        memory.set(this.expandMemory, data);
+      },
+      set(k, v) {
+        const data = memory.get(this.expandMemory) || {};
+        data[k] = v;
+        memory.set(this.expandMemory, data);
+      },
+      get(k) {
+        const data = memory.get(this.expandMemory);
+        if(!k) return data;
+        return (data || {})[k] || false;
+      },
       openTop(show) {
         this.showTop = show;
       },

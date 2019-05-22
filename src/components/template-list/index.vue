@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown template__list temp-panel">
-    <div id="template-list" class="dropdown-toggle current-temp-item"
+    <div v-click-out-side="hide" id="template-list" class="dropdown-toggle current-temp-item"
         @click="toggle">
       <b :class="['temp-item', template]"  title="{{template}}"></b>
       <span class="caret"></span>
@@ -18,6 +18,7 @@
   }
 </style>
 <script>
+  import clickOutSide from '../../directives/clickoutside'
   export default  {
     props: {},
     data() {
@@ -27,6 +28,9 @@
         show: false,
         template: null
       }
+    },
+    directives: {
+      clickOutSide
     },
     methods: {
       change(key){
@@ -39,6 +43,9 @@
             this.minder.disable()
           }
         }
+      },
+      hide() {
+        this.show = false
       },
       toggle() {
         this.show = !this.show

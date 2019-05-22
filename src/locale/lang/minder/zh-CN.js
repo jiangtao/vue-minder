@@ -154,6 +154,7 @@ module.exports = {
     'rename_success': '{0} 重命名成功',
     'move_success': '{0} 移动成功到 {1}',
     
+    
     'command': {
       'appendsiblingnode': '插入同级主题',
       'appendparentnode': '插入上级主题',

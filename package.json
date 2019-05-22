@@ -1,6 +1,6 @@
 {
   "name": "vue-minder",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "title": "Vue kityminder",
   "description": "Vue Kityminder",
   "homepage": "https://github.com/hexyun/vue-minder",
@@ -24,7 +24,8 @@
     "build:style": "gulp --gulpfile build/build-style.js",
     "docs": "webpack --config build/webpack.docs.config.js && npm run copy:docs",
     "build:prod": "npm run build:style && webpack --config build/webpack.dist.prod.config.js",
-    "build": "rm -fr docs dist && npm run build:prod && npm run docs",
+    "build": "rm -fr docs dist && npm run svgo && npm run build:prod && npm run docs",
+    "svgo": "svgo --enable=removeXMLNS  src/components/icon/icons/*.svg",
     "copy:docs": "cp -r dist/styles docs",
     "copy:example": "cp -r dist/styles examples",
     "copy": "npm run copy:docs && npm run copy:example",

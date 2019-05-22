@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown theme-panel theme__panel">
-    <div @click="show = !show" class="dropdown-toggle theme-item-selected">
+    <div v-click-out-side="hide" @click="show = !show" class="dropdown-toggle theme-item-selected">
       <a class="theme-item"
          :style="themeStyle"
          :title="value">
@@ -25,6 +25,8 @@
   }
 </style>
 <script>
+  import clickOutSide from '../../directives/clickoutside'
+
   export default {
     props: {},
     data() {
@@ -34,27 +36,29 @@
         themeKeyList: ['classic',
           'classic-compact',
           'fresh-blue',
-          'fresh-blue-compat',
+          // 'fresh-blue-compat',
           'fresh-green',
-          'fresh-green-compat',
+          // 'fresh-green-compat',
           'fresh-pink',
-          'fresh-pink-compat',
+          // 'fresh-pink-compat',
           'fresh-purple',
-          'fresh-purple-compat',
+          // 'fresh-purple-compat',
           'fresh-red',
-          'fresh-red-compat',
+          // 'fresh-red-compat',
           'fresh-soil',
-          'fresh-soil-compat',
+          // 'fresh-soil-compat',
           'snow',
-          'snow-compact',
+          // 'snow-compact',
           'tianpan',
-          'tianpan-compact',
-          'fish',
-          'wire'
+          // 'tianpan-compact',
+          'fish'
         ],
         themeList: null,
         value: 'fresh-blue'
       };
+    },
+    directives: {
+      clickOutSide
     },
     computed: {
       themeStyle() {
@@ -64,10 +68,13 @@
     ready() {
       this.$nextTick(() => {
         this.minder = window.minder;
-        this.themeList = kityminder.Minder.getThemeList();
+        this.themeList = window.kityminder.Minder.getThemeList();
       });
     },
     methods: {
+      hide() {
+        this.show = false
+      },
       changeTheme(key) {
         this.minder.enable()
         this.minder.execCommand('theme', key)

@@ -15,8 +15,15 @@
     computed: {},
     methods: {
       generateIndex(node) {
-        return `_${node.getData('id')}`
+        return `_${node.data.id || node.data._id}`;
+      },
+      setColor(node, properties) {
+        node.setData(properties)
+        node.render()
       }
+    },
+    beforeDestroy() {
+      this.$refs.minder.setMemory();
     },
     ready() {
       var self = this;
@@ -25,7 +32,7 @@
         'root': {
           'data': {
             'name': '中心主题',
-            'hexType': 'app',
+            'hexType': 'project',
             'id': 1
           },
           'children': [
@@ -107,7 +114,8 @@
             {
               'data': {
                 'name': '222',
-                'id': 11
+                'id': 11,
+                'hexType': 'page'
               },
               'children': []
             },
@@ -122,7 +130,8 @@
             {
               'data': {
                 'name': '333',
-                'id': 13
+                'id': 13,
+                'hexType': 'page',
               },
               'children': []
             },
@@ -137,14 +146,16 @@
             {
               'data': {
                 'name': '555',
-                'id': 15
+                'id': 15,
+                'hexType': 'page',
               },
               'children': []
             },
             {
               'data': {
                 'name': '666',
-                'id': 16
+                'id': 16,
+                'hexType': 'page',
               },
               'children': []
             }
@@ -176,10 +187,18 @@
         // minder.setOption('project_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/project.png')
         // minder.setOption('page_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/page.png')
         // minder.setOption('dir_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/dir.png')
+
         setTimeout(() => {
-          minder.importJson(appNode);
+          minder.importJson(this.$refs.minder.getMemory(appNode));
         }, 1000);
-        
+
+        window.onbeforeunload = (event) => {
+          // event.preventDefault();
+          // event.returnValue = '';
+          this.$refs.minder.setMemory();
+        };
+
+
         minder.on('editText', function(e, minder) {
           var node = e.minder.getSelectedNode();
         });
@@ -224,6 +243,33 @@
             console.log('after remove', node);
           }
         });
+        const colors = {
+          'project': {
+            color: '#f73131',
+            'font-size': 22
+          },
+          'app': {
+            color: 'blue',
+            'font-size': 20
+          },
+          'dir': {
+            color: 'green',
+            'font-size': 20
+          },
+          'page': {
+            'font-size': 16
+          },
+        };
+        // 设置颜色
+        // minder.on('contentchange', (node) => {
+        //   minder.getRoot().traverse(n => {
+        //     const hextype = n.getData('hexType');
+        //     if(hextype && colors[hextype]) {
+        //       this.setColor(n, colors[hextype]);
+        //     }
+        //   });
+        //   minder.layout()
+        // });
       });
     }
   };
