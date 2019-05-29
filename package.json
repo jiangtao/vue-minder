@@ -1,6 +1,6 @@
 {
   "name": "vue-minder",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "title": "Vue kityminder",
   "description": "Vue Kityminder",
   "homepage": "https://github.com/hexyun/vue-minder",
@@ -47,7 +47,7 @@
     "core-js": "^2.4.1",
     "hotbox": "fex-team/hotbox",
     "kity": "^2.0.4",
-    "kityminder-core": "github:jiangtao/kityminder-core#362c1af",
+    "kityminder-core": "github:jiangtao/kityminder-core",
     "vue": "1.0.28"
   },
   "devDependencies": {

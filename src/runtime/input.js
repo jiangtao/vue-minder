@@ -22,9 +22,9 @@ define(function(require, exports, module) {
         var isGecko = window.kity.Browser.gecko;
 
         // setup everything to go
-        setupReciverElement();
-        setupFsm();
-        setupHotbox();
+        // setupReciverElement();
+        // setupFsm();
+        // setupHotbox();
 
         // expose editText()
         this.editText = editText;

@@ -218,8 +218,11 @@
         });
 
         minder.on('beforeExecCommand', function(e) {
+          console.log(e.commandName)
           var node = e.minder.getSelectedNode();
-          if(/append/i.test(e.commandName)) {
+          if(/arrange/i.test(e.commandName)) {
+            console.log('arrange', node, e)
+          } else if(/append/i.test(e.commandName)) {
             console.log('add', node);
           } else if(/remove/i.test(e.commandName)) {
             console.log('remove', node);

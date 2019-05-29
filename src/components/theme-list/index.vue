@@ -49,7 +49,7 @@
           // 'fresh-soil-compat',
           'snow',
           // 'snow-compact',
-          'tianpan',
+          // 'tianpan',
           // 'tianpan-compact',
           'fish'
         ],

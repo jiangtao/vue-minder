@@ -55,7 +55,9 @@
     ready() {
       this.$nextTick(() => {
         this.minder = window.minder
-        this.templateList = kityminder.Minder.getTemplateList()
+        const templateList = kityminder.Minder.getTemplateList()
+        delete templateList.tianpan
+        this.templateList = templateList
         this.template = this.minder.queryCommandValue('template')
       })
     }

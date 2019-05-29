@@ -1,8 +1,8 @@
 <template>
   <div class="minder-editor-container">
     <div v-if="lazy && showTopTab && showTop" class="top-tab minder-top-tab minder__top-tab">
-      <template-list v-if="lazy && showTemplate" class="template__list inline-directive"></template-list>
-      <theme-list class="theme-list" v-if="lazy && showTheme"></theme-list>
+      <template-list v-ref:template v-if="lazy && showTemplate" class="template__list inline-directive"></template-list>
+      <theme-list v-ref:theme class="theme-list" v-if="lazy && showTheme"></theme-list>
       <search v-if="lazy" class="search__box"></search>
       <breadcrumb :unique-index-fn="uniqueIndexFn" v-if="lazy && showBreadcrumb && !enable"
                   class="breadcrumb__box"></breadcrumb>
@@ -123,7 +123,7 @@
       },
     },
     ready() {
-      var self = this;
+      var self = this
       this.$nextTick(() => {
         var editor = window.editor = new Editor(this.$els.editor);
         var importData = this.importData;
@@ -141,7 +141,11 @@
           var json = editor.minder.exportJson();
           self.$emit('content-change', json);
         });
-        // editor.minder.on('import', () => this.selectNodes())
+        editor.minder.on('import', function() {
+          var json = editor.minder.exportJson();
+          self.$refs.template.change(json.template)
+          self.$refs.theme.changeTheme(json.theme)
+        })
         window.minder = window.km = editor.minder;
         this.editor = editor;
         this.minder = minder;
