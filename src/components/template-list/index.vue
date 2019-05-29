@@ -49,7 +49,6 @@
       },
       toggle() {
         this.show = !this.show
-        console.log(this.show)
       }
     },
     ready() {

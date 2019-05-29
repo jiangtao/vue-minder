@@ -137,6 +137,10 @@
         }
         
         editor.minder.importJson(this.getMemory(importData));
+
+        this.editor = editor;
+        this.minder = editor.minder;
+        
         editor.minder.on('contentchange', function() {
           var json = editor.minder.exportJson();
           self.$emit('content-change', json);
@@ -147,8 +151,6 @@
           self.$refs.theme.changeTheme(json.theme)
         })
         window.minder = window.km = editor.minder;
-        this.editor = editor;
-        this.minder = minder;
         if(!this.enable) this.minder.disable();
         this.lazy = true;
       });
