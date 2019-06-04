@@ -12,10 +12,10 @@
             v-show="showTip">{{'第 ' + curIndex + ' 条，共 ' + resultNum + ' 条'}}</span>
     </div>
     <div class="btn-group btn-group-sm prev-and-next-btn" role="group">
-      <button type="button" class="btn btn-default" @click="doSearch('prev')">
+      <button type="button" class="btn btn-default" @click="doSearch(keyword, 'prev')">
         <span class="glyphicon glyphicon-chevron-up"></span>
       </button>
-      <button type="button" class="btn btn-default" @click="doSearch('next')">
+      <button type="button" class="btn btn-default" @click="doSearch(keyword, 'next')">
         <span class="glyphicon glyphicon-chevron-down"></span>
       </button>
     </div>
@@ -65,9 +65,15 @@
           }
         }
       },
-      doSearch(type) {
+      doSearch(keyword, type, minder) {
+        if(minder) {
+          this.minder = minder
+          this.getNodes()
+        }
+        
+        if(!this.minder) return
+        console.log(111)
         var self = this
-        var keyword = this.keyword.toLowerCase();
         this.showTip = false;
         this.minder.fire('hidenoterequest');
 
@@ -134,14 +140,17 @@
         })
       },
       getNodes() {
-        this.nodeSequence = [];
-        this.minder.getRoot().traverse(node => {
-          this.nodeSequence.push(node);
-        });
+        if(this.minder) {
+          this.nodeSequence = [];
+          this.minder.getRoot().traverse(node => {
+            this.nodeSequence.push(node);
+          });
+        }
       }
     },
     ready() {
       this.$nextTick(() => {
+        if(!window.minder) return
         this.minder = window.minder;
         this.getNodes();
         this.minder.on('contentchange', () => {

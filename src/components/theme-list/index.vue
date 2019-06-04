@@ -28,11 +28,14 @@
 import clickOutSide from "../../directives/clickoutside";
 
 export default {
-  props: {},
+  props: {
+    kityminder: {
+      type: Object
+    }
+  },
   data() {
     return {
       show: false,
-      minder: null,
       themeKeyList: [
         "classic",
         "classic-compact",
@@ -54,7 +57,7 @@ export default {
         // 'tianpan-compact',
         "fish"
       ],
-      themeList: null,
+      themeList: {},
       value: "fresh-blue"
     };
   },
@@ -66,21 +69,31 @@ export default {
       return this.getThemeThumbStyle(this.value);
     }
   },
-  ready() {
-    this.$nextTick(() => {
-      this.minder = window.minder;
-      this.themeList = window.kityminder.Minder.getThemeList();
-    });
+  watch: {
+    kityminder(v, oldV) {
+      if(v !== oldV) {
+        this.minder = v
+        this.themeList = window.kityminder.Minder.getThemeList();
+      }
+    }
   },
   methods: {
     hide() {
       this.show = false;
     },
-    changeTheme(key) {
+    getThemes() {
+      if(window.kityminder.Minder) {
+        return this.themeKeyList
+      }
+    },
+    changeTheme(key, minder) {
+      if(minder) {
+        this.minder = minder
+      }
       if (this.minder) {
         this.minder.enable();
         this.minder.execCommand("theme", key);
-        this.value = minder.queryCommandValue("theme");
+        this.value = this.minder.queryCommandValue("theme");
         if (!this.$parent.enable) {
           this.minder.disable();
         }
@@ -88,11 +101,7 @@ export default {
       }
     },
     getThemeThumbStyle(theme) {
-      if (!this.minder) return {};
-      var themeObj = this.themeList[theme];
-      if (!themeObj) {
-        return {};
-      }
+      var themeObj = this.themeList[theme] || {};
       var style = {
         color: themeObj["root-color"],
         "border-radius": themeObj["root-radius"] / 2

@@ -218,7 +218,6 @@
         });
 
         minder.on('beforeExecCommand', function(e) {
-          console.log(e.commandName)
           var node = e.minder.getSelectedNode();
           if(/arrange/i.test(e.commandName)) {
             console.log('arrange', node, e)
