@@ -62,11 +62,11 @@
       },
       showTemplate: {
         type: Boolean,
-        default: false
+        default: true
       },
       showTheme: {
         type: Boolean,
-        default: false
+        default: true
       },
       showNote: {
         type: Boolean,
