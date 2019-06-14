@@ -57,8 +57,7 @@
       handleKeyDown(e) {
         this.keyword = e.target.value.trim();
         if(e.keyCode == 13) {
-          this.direction = e.shiftKey ? 'prev' : 'next';
-          this.doSearch(this.keyword, this.direction);
+          this.doSearch(this.keyword, e.shiftKey ? 'prev' : 'next');
         }
         if(e.keyCode == 27) {
           this.exitSearch();
@@ -86,10 +85,9 @@
             this.searchSequence.push({node: node, keyword: keyword});
           }
         }
-        console.log(keyword, this.nodeSequence, this.searchSequence);
       },
       doSearch(keyword, type, minder) {
-        console.log('xx', arguments);
+        this.direction = type;
         var self = this;
         this.showTip = false;
         this.minder.fire('hidenoterequest');
@@ -114,7 +112,6 @@
         }
 
         this.resultNum = this.searchSequence.length;
-        console.log(this.searchSequence);
 
         if(this.searchSequence.length) {
           var curIndex = newSearch ? 0 : (this.direction === 'next' ? this.doSearch.lastIndex + 1 : this.doSearch.lastIndex - 1) || 0;
@@ -126,20 +123,18 @@
           this.curIndex = curIndex + 1;
 
           function setSearchResult(node, previewKeyword, minder) {
-            minder.execCommand('camera', node, 50);
             setTimeout(function() {
-              minder.select(node, true);
-              if(!node.isExpanded()) {
-                while(node.parent) {
-                  node.expand();
-                  node = node.parent;
-                }
-                node.renderTree();
-                self.minder.layout(100);
+              minder.select([node], true);
+              while(node && !node.isExpanded() && node.parent) {
+                node.expand();
+                node = node.parent;
               }
+              node.renderTree().layout()
+              
               if(previewKeyword) {
                 minder.fire('shownoterequest', {node: node, keyword: previewKeyword});
               }
+              minder.execCommand('camera', minder.getSelectedNode() || null, 0);
             }, 60);
           }
         }

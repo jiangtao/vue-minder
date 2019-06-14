@@ -158,7 +158,6 @@
     },
     methods: {
       toggleExpand() {
-        console.log(this.isExpand)
         if(this.isExpand) {
           this.minder.execCommand('ExpandToLevel', 1)
         } else{

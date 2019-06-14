@@ -177,7 +177,7 @@
             selecteds.indexOf(id) > -1 && selectedNodes.push(node)
           }
         })
-        this.minder.select(selectedNodes, true)
+        if(selectedNodes.length) this.minder.select(selectedNodes, true)
         selecteds.length = 0
       },
       getMemory(data) {
