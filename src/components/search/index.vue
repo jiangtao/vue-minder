@@ -107,9 +107,7 @@
 
         this.doSearch.lastKeyword = keyword;
 
-        if(newSearch) {
-          this._makeSearchSequence(keyword);
-        }
+        this._makeSearchSequence(keyword);
 
         this.resultNum = this.searchSequence.length;
 
