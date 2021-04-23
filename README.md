@@ -1,7 +1,7 @@
 # Vue Minder
 
 本组件主要内聚百度脑图的能力，使脑图可以便于在Vue生态下进行扩展。
-[DEMO地址](http://hexyun.github.io/vue-minder)
+[DEMO地址](https://www.imjiangtao.com/vue-minder/#!/editor)
 
 --- 
 
