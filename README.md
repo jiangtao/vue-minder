@@ -72,3 +72,5 @@ npm install vue-minder
 ├── examples 预览demo源码，便于本地开发
 ├── src 核心源代码
 ```
+## TODO
+- [ ] Support Vue2.7, Vue2.7作为过渡版本，相对来说较稳定，考虑支持
