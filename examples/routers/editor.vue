@@ -9,7 +9,8 @@ export default {
         width: '1000px',
         height: '600px'
       },
-      enable: false
+      enable: false,
+      beforeUnloadHandler: null
     };
   },
   computed: {},
@@ -23,7 +24,14 @@ export default {
     }
   },
   beforeUnmount() {
-    this.$refs.minderRef.setMemory();
+    // Clean up event listener to prevent memory leak
+    if (this.beforeUnloadHandler) {
+      window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+    }
+    // Save minder state before unmounting
+    if (this.$refs.minderRef) {
+      this.$refs.minderRef.setMemory();
+    }
   },
   mounted() {
     var self = this;
@@ -188,20 +196,25 @@ export default {
       // minder.setOption('page_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/page.png')
       // minder.setOption('dir_url', 'https://hexyuncdn.oss-cn-beijing.aliyuncs.com/mind/dir.png')
 
+      // Wait for minder to fully initialize before importing data
+      // This ensures the editor is ready to receive and render the mind map structure
       setTimeout(() => {
-        minder.importJson(this.$refs.minderRef.getMemory(appNode));
+        if (this.$refs.minderRef) {
+          minder.importJson(this.$refs.minderRef.getMemory(appNode));
+        }
       }, 1000);
 
-      window.onbeforeunload = (event) => {
+      // Store handler reference for cleanup in beforeUnmount
+      this.beforeUnloadHandler = (event) => {
         // event.preventDefault();
         // event.returnValue = '';
-        this.$refs.minderRef.setMemory();
+        if (this.$refs.minderRef) {
+          this.$refs.minderRef.setMemory();
+        }
       };
+      window.addEventListener('beforeunload', this.beforeUnloadHandler);
 
 
-      minder.on('editText', function(e, minder) {
-        var node = e.minder.getSelectedNode();
-      });
       // 只有选中的的时候会触发
       minder.on('selectionchange', function(e) {
         self.minder = e.minder;
@@ -212,8 +225,6 @@ export default {
             node.parent.layout();
           }, 0);
         }
-        if(self.lock && node) {
-        }
         self.lock = true;
       });
 
@@ -222,15 +233,6 @@ export default {
         if(/arrange/i.test(e.commandName)) {
           console.log('arrange', node, e)
         } else if(/append/i.test(e.commandName)) {
-          console.log('add', node);
-        } else if(/remove/i.test(e.commandName)) {
-          console.log('remove', node);
-        }
-      });
-      minder.on('beforeExecCommand', function(e) {
-        var node = e.minder.getSelectedNode();
-        console.log(node);
-        if(/append/i.test(e.commandName)) {
           console.log('add', node);
         } else if(/remove/i.test(e.commandName)) {
           console.log('remove', node);
