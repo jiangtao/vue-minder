@@ -1,15 +1,17 @@
 <template>
   <div class="minder-editor-container">
     <div v-visible="lazy && showTopTab && showTop" class="top-tab minder-top-tab minder__top-tab">
-      <template-list :kityminder="minder" v-ref:template v-visible="lazy && showTemplate" class="template__list inline-directive"></template-list>
-      <theme-list :kityminder="minder" v-ref:theme class="theme-list" v-visible="lazy && showTheme"></theme-list>
-      <search :kityminder="minder" v-ref:search v-visible="lazy" class="search__box"></search>
+      <template-list :kityminder="minder" :enable="enable" ref="templateRef" v-visible="lazy && showTemplate" class="template__list inline-directive"></template-list>
+      <theme-list :kityminder="minder" :enable="enable" ref="themeRef" class="theme-list" v-visible="lazy && showTheme"></theme-list>
+      <search :kityminder="minder" :show-search="showSearch" ref="searchRef" v-visible="lazy" class="search__box"></search>
       <breadcrumb :unique-index-fn="uniqueIndexFn" v-if="lazy && showBreadcrumb && !enable"
                   class="breadcrumb__box"></breadcrumb>
     </div>
-    <div v-el:editor class="minder-editor"></div>
+    <div ref="editorRef" class="minder-editor"></div>
     <navigator
       @open-top="openTop"
+      :show-top="showTop"
+      :show-top-tab="showTopTab"
       v-if="lazy && showNavigator"
       class="navigator">
     </navigator>
@@ -45,6 +47,7 @@
 
   export default {
     name: 'mind-editor',
+    emits: ['content-change'],
     components: {
       Navigator,
       Search,
@@ -127,10 +130,10 @@
         }
       },
     },
-    ready() {
+    mounted() {
       var self = this
       this.$nextTick(() => {
-        var editor = window.editor = new Editor(this.$els.editor);
+        var editor = window.editor = new Editor(this.$refs.editorRef);
         var importData = this.importData;
         if(typeof importData === 'string') {
           try {
@@ -140,25 +143,25 @@
             console.warn('hex minder import data format error');
           }
         }
-        
+
         editor.minder.importJson(this.getMemory(importData));
 
         this.editor = editor;
         this.minder = editor.minder;
-        
+
         console.log(this);
-        
+
         editor.minder.on('contentchange', function() {
           var json = editor.minder.exportJson();
           self.$emit('content-change', json);
         });
         editor.minder.on('import', function() {
           var json = editor.minder.exportJson();
-          if(self.$refs.template) {
-            self.$refs.template.changeTemplate(json.template)  
+          if(self.$refs.templateRef) {
+            self.$refs.templateRef.changeTemplate(json.template)
           }
-          if(self.$refs.theme) {
-            self.$refs.theme.changeTheme(json.theme)  
+          if(self.$refs.themeRef) {
+            self.$refs.themeRef.changeTheme(json.theme)
           }
         })
         window.minder = window.km = editor.minder;

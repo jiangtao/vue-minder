@@ -21,12 +21,12 @@ function isQuotaExceeded(e) {
   return quotaExceeded;
 }
 
-module.exports = {
+export default {
   get: function(key) {
     var value = window.localStorage.getItem(key);
     return null || JSON.parse(value);
   },
-  
+
   set: function(key, value) {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));

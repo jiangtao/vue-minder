@@ -1,6 +1,6 @@
 import kity from 'kity';
 import kityminder from 'kityminder-core';
-import Editor from './components/editor';
+import Editor from './components/editor/index.vue';
 import './module/imageicon'
 
 const MindEditor = {
@@ -18,4 +18,5 @@ if(typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 }
 
-module.exports = Object.assign(MindEditor, {install});   // eslint-disable-line no-undef
+export default Object.assign(MindEditor, {install});
+export { Editor as Minder, install };

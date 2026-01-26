@@ -62,4 +62,4 @@ function initConf() {
   return this
 }
 
-module.exports = initConf.call(conf)
+export default initConf.call(conf)

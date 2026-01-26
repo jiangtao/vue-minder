@@ -6,9 +6,9 @@
       <span class="caret"></span>
     </div>
     <ul v-show="show" class="dropdown-menu temp-list">
-      <li v-for="(key, templateObj) in templateList" class="temp-item-wrap">
-        <a @click="changeTemplate(key)" :class="['temp-item', key]" :class="{ 'temp-item-selected' : key == template }"
-           title="{{ key }}"></a>
+      <li v-for="(key, templateObj) in templateList" :key="key" class="temp-item-wrap">
+        <a @click="changeTemplate(key)" :class="['temp-item', key, { 'temp-item-selected': key == template }]"
+           :title="key"></a>
       </li>
     </ul>
   </div>
@@ -25,6 +25,10 @@
     props: {
       kityminder: {
         type: Object
+      },
+      enable: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -57,8 +61,8 @@
           this.minder.execCommand('template', key);
           this.template = this.minder.queryCommandValue('template');
           this.show = false;
-          
-          if(!this.$parent.enable) {
+
+          if(!this.enable) {
             this.minder.disable();
           }
         }

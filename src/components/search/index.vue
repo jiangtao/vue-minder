@@ -2,7 +2,7 @@
   <div v-show="showSearch" id="search" class="search-box clearfix">
     <div class="input-group input-group-sm search-input-wrap">
       <input type="text"
-             v-el:search-input
+             ref="searchInputRef"
              id="search-input"
              class="form-control search-input ng-pristine ng-valid ng-touched"
              v-model="keyword"
@@ -29,6 +29,10 @@
     props: {
       kityminder: {
         type: Object
+      },
+      showSearch: {
+        type: Boolean,
+        default: false
       }
     },
     watch: {
@@ -48,7 +52,7 @@
         searchSequence: [],
         nodeSequence: [],
         direction: 'next',
-        showSearch: this.$parent.showSearch,
+        showSearch: this.showSearch,
         minder: null
       };
     },
@@ -93,7 +97,7 @@
         this.minder.fire('hidenoterequest');
 
         if(!keyword || !/\S/.exec(keyword)) {
-          this.$els.searchInput.focus();
+          this.$refs.searchInputRef.focus();
           return;
         }
 
@@ -138,15 +142,15 @@
         }
       },
       exitSearch() {
-        this.$els.searchInput.blur();
+        this.$refs.searchInputRef.blur();
         minder.fire('hidenoterequest');
       },
       enterSearch() {
         this.showSearch = true;
         this.$nextTick(() => {
-          this.$els.searchInput.focus();
+          this.$refs.searchInputRef.focus();
           if(this.keyword) {
-            this.$els.searchInput.setSelectionRange(0, this.keyword.length);
+            this.$refs.searchInputRef.setSelectionRange(0, this.keyword.length);
           }
         });
       },
@@ -159,7 +163,7 @@
         }
       }
     },
-    ready() {
+    mounted() {
       document.body.addEventListener('keydown', e => {
         if(e.keyCode == 70 && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
           this.enterSearch();

@@ -1,17 +1,17 @@
 <template>
   <div class="dropdown theme-panel theme__panel">
     <div v-click-out-side="hide" @click="show = !show" class="dropdown-toggle theme-item-selected">
-      <a class="theme-item" :style="themeStyle" :title="value">{{ value | ml 'theme'}}</a>
+      <a class="theme-item" :style="themeStyle" :title="value">{{ value }}</a>
       <span class="caret"></span>
     </div>
     <ul v-show="show" class="dropdown-menu theme-list">
-      <li v-for="key in themeKeyList" class="theme-item-wrap">
+      <li v-for="key in themeKeyList" :key="key" class="theme-item-wrap">
         <a
           @click="changeTheme(key)"
           class="theme-item"
           :style="getThemeThumbStyle(key)"
-          title="{{ key | ml 'theme' }}"
-        >{{ key | ml 'theme'}}</a>
+          :title="key"
+        >{{ key }}</a>
       </li>
     </ul>
   </div>
@@ -31,6 +31,10 @@ export default {
   props: {
     kityminder: {
       type: Object
+    },
+    enable: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -94,7 +98,7 @@ export default {
         this.minder.enable();
         this.minder.execCommand("theme", key);
         this.value = this.minder.queryCommandValue("theme");
-        if (!this.$parent.enable) {
+        if (!this.enable) {
           this.minder.disable();
         }
         this.show = false;
