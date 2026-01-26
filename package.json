@@ -24,16 +24,17 @@
     "core-js": "^2.4.1",
     "hotbox": "fex-team/hotbox",
     "kity": "^2.0.4",
-    "kityminder-core": "github:jiangtao/kityminder-core"
+    "kityminder-core": "github:jiangtao/kityminder-core",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "vue": "^3.4.0",
     "@vitejs/plugin-vue": "^5.0.0",
-    "vite": "^5.0.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-clean-css": "^2.0.13",
     "gulp-less": "^3.1.0",
-    "gulp-rename": "^1.2.2"
+    "gulp-rename": "^1.2.2",
+    "vite": "^5.0.0",
+    "vue": "^3.4.0"
   }
 }
