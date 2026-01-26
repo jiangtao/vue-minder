@@ -67,7 +67,7 @@
         <svg v-if="isExpand" t="1558500583625" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="17894" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32"><defs><style type="text/css"></style></defs><path d="M122.88 491.52h778.24v40.96H122.88zM690.3808 219.3408l-29.0816-29.0816-128.8192 129.024V0h-40.96v319.2832l-128.8192-129.024-29.0816 29.0816 178.3808 178.176 178.3808-178.176zM333.6192 804.6592l29.0816 29.0816 128.8192-129.024V1024h40.96V704.7168l128.8192 129.024 29.0816-29.0816-178.3808-178.176-178.3808 178.176z" p-id="17895"></path></svg>
       </div>
     </div>
-    <div ref="navPreviewerRef" class="nav-previewer" v-show="showNavigator && isNavOpen"></div>
+    <div ref="navPreviewer" class="nav-previewer" v-show="showNavigator && isNavOpen"></div>
   </div>
 </template>
 <style>
@@ -265,7 +265,7 @@
          * */
 
         // 画布，渲染缩略图
-        this.paper = new kity.Paper(this.$els.navPreviewer);
+        this.paper = new kity.Paper(this.$refs.navPreviewer);
         var paper = this.paper;
 
         // 用两个路径来挥之节点和连线的缩略图
@@ -331,8 +331,8 @@
           paper.on('mousedown', function(e) {
             dragging = true;
             moveView(e.getPosition('top'), 200);
-            if(ctx.$els.navPreviewer)
-              ctx.$els.navPreviewer.classList.add('grab');
+            if(ctx.$refs.navPreviewer)
+              ctx.$refs.navPreviewer.classList.add('grab');
           });
 
           paper.on('mousemove', function(e) {
@@ -342,8 +342,8 @@
           });
           window.addEventListener('mouseup', () => {
             dragging = false;
-            if(ctx.$els.navPreviewer)
-              ctx.$els.navPreviewer.classList.remove('grab');
+            if(ctx.$refs.navPreviewer)
+              ctx.$refs.navPreviewer.classList.remove('grab');
           });
         }
       });

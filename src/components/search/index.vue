@@ -143,7 +143,7 @@
       },
       exitSearch() {
         this.$refs.searchInputRef.blur();
-        minder.fire('hidenoterequest');
+        this.minder?.fire('hidenoterequest');
       },
       enterSearch() {
         this.showSearch = true;

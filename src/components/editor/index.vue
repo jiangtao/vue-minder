@@ -61,7 +61,8 @@
         default: false
       },
       uniqueIndexFn: {
-        type: Function
+        type: Function,
+        required: true
       },
       showTemplate: {
         type: Boolean,
@@ -133,7 +134,7 @@
     mounted() {
       var self = this
       this.$nextTick(() => {
-        var editor = window.editor = new Editor(this.$refs.editorRef);
+        var editor = new Editor(this.$refs.editorRef);
         var importData = this.importData;
         if(typeof importData === 'string') {
           try {
@@ -148,8 +149,6 @@
 
         this.editor = editor;
         this.minder = editor.minder;
-
-        console.log(this);
 
         editor.minder.on('contentchange', function() {
           var json = editor.minder.exportJson();

@@ -24,7 +24,13 @@ function isQuotaExceeded(e) {
 export default {
   get: function(key) {
     var value = window.localStorage.getItem(key);
-    return null || JSON.parse(value);
+    if (!value) return null;
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      console.warn('Failed to parse localStorage value for key:', key, e);
+      return null;
+    }
   },
 
   set: function(key, value) {
