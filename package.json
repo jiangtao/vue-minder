@@ -2,6 +2,7 @@
   "name": "vue-minder",
   "version": "3.0.0",
   "description": "Vue Kityminder - Vue 3 version",
+  "license": "MIT",
   "main": "dist/minder.min.js",
   "module": "dist/minder.es.js",
   "style": "dist/styles/minder.css",
@@ -16,6 +17,7 @@
     "dist",
     "src",
     "README.md",
+    "README.en.md",
     "LICENSE"
   ],
   "scripts": {
