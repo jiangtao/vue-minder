@@ -14,6 +14,22 @@ Vue Minder 将百度脑图的 KityMinder Core 封装为 Vue 组件，用于在 V
 | `2.x` | Vue 2 | 暂不支持，不建议使用 |
 | `master` / 1.x | Vue 1 | 历史版本，不再维护 |
 
+### 当前可用状态
+
+`3.x` 已可用于 Vue `3.2.25` 至当前 Vue 3.x 的浏览器端应用，包的
+`peerDependencies` 为 `vue: ^3.2.25`。当前已验证以下使用边界：
+
+- 具名组件与默认插件导出可被消费项目正确解析；
+- 通过 `import()` / `defineAsyncComponent()` 动态加载组件；
+- 同时动态加载组件 JavaScript 与 `vue-minder/style.css`；
+- 从本地 tarball 安装后，在最低支持版本 Vue `3.2.25` 的消费项目中完成 Vite 生产构建。
+
+精确的 Vue `3.0.x` 不能使用当前产物：新版 Vue SFC 编译器生成的运行时辅助函数
+在 Vue 3.0 中尚不存在。请先将宿主应用升级到 Vue `3.2.25` 或更高的 Vue 3.x 版本。
+
+目前 `3.x` 尚未发布到 npm，所以“可用”是指可以从 `3.x` 分支构建并安装本地包，
+不能直接把 npm 上的 `vue-minder@latest` 当作 Vue 3 版本使用。
+
 ### 安装
 
 3.x 尚未发布到 npm。请先从源码构建本地安装包：
@@ -129,6 +145,59 @@ createApp(App)
 
 注册后可在模板中直接使用 `<Minder />`。
 
+### 应用级运行时动态加载
+
+可以使用 Vue 的异步组件在首次渲染时才加载编辑器。下面的写法会同时延迟加载
+组件代码和样式，适合路由级按需加载：
+
+```vue
+<script setup>
+import { defineAsyncComponent } from 'vue'
+
+const Minder = defineAsyncComponent(async () => {
+  await import('vue-minder/style.css')
+  const module = await import('vue-minder')
+  return module.Minder
+})
+
+const mindMap = {
+  root: {
+    data: { id: 1, name: '中心主题' },
+    children: []
+  },
+  template: 'default',
+  theme: 'fresh-blue'
+}
+
+const uniqueIndexFn = (node) => node.data.id
+</script>
+
+<template>
+  <div class="minder-host">
+    <Minder
+      :import-data="mindMap"
+      :unique-index-fn="uniqueIndexFn"
+    />
+  </div>
+</template>
+
+<style scoped>
+.minder-host {
+  position: relative;
+  height: 600px;
+}
+</style>
+```
+
+如果希望页面出现前就完成样式加载，可继续在应用入口静态导入
+`vue-minder/style.css`，只对组件 JavaScript 使用动态导入。
+
+KityMinder 运行时需要 `window`、`document` 和 SVG DOM。Vite SPA 可以直接使用上述
+写法；Nuxt 等 SSR 应用应将组件放入客户端专用边界，并确保动态导入只在客户端执行。
+
+这里的“动态加载”是指宿主应用按需加载完整的 Vue Minder JavaScript/CSS chunk。
+编辑器内部的 `src/runtime/*` 模块仍会静态组装进产物，不支持逐个 runtime 子模块动态加载。
+
 ### 数据格式
 
 节点标题使用 `data.name`。每个节点由 `data` 和 `children` 组成，其他业务字段会随 JSON 一起保留：
@@ -198,6 +267,20 @@ npm run preview:site # 本地预览生产站点
 ## English Usage Guide
 
 Vue Minder wraps Baidu's KityMinder Core as a Vue mind-map editor. Vue 3 is the active development line. Vue 2 is currently unsupported, and `master` is retained only as the historical Vue 1 line.
+
+### Current status
+
+The `3.x` line can be used in browser-based applications from Vue `3.2.25`
+through the current Vue 3.x line. Its peer dependency is `vue: ^3.2.25`.
+Named/default exports, JavaScript/CSS code splitting, and a production consumer
+build using the minimum supported Vue `3.2.25` are covered by the build tests.
+
+Vue `3.0.x` is not compatible with the current bundle because it does not
+provide runtime helpers emitted by the modern Vue SFC compiler. Upgrade the
+host application to Vue `3.2.25` or a newer Vue 3.x release.
+
+Version 3 has not been published to npm yet. Build and install a tarball from
+the `3.x` branch instead of assuming that `vue-minder@latest` is the Vue 3 line.
 
 ### Installation
 
@@ -276,6 +359,59 @@ createApp(App).use(VueMinder).mount('#app')
 ```
 
 The component emits `content-change` with the complete JSON document. Its public ref exposes `getExportJson()`, `getSelectedNode()`, `getSelectedNodes()`, `setMemory()`, `getMemory(data)`, and the low-level `minder` instance.
+
+### Application-level runtime loading
+
+Use an async component to load both the editor runtime and its stylesheet when
+the component is rendered for the first time:
+
+```vue
+<script setup>
+import { defineAsyncComponent } from 'vue'
+
+const Minder = defineAsyncComponent(async () => {
+  await import('vue-minder/style.css')
+  const module = await import('vue-minder')
+  return module.Minder
+})
+
+const mindMap = {
+  root: {
+    data: { id: 1, name: 'Central topic' },
+    children: []
+  },
+  template: 'default',
+  theme: 'fresh-blue'
+}
+
+const uniqueIndexFn = (node) => node.data.id
+</script>
+
+<template>
+  <div class="minder-host">
+    <Minder
+      :import-data="mindMap"
+      :unique-index-fn="uniqueIndexFn"
+    />
+  </div>
+</template>
+
+<style scoped>
+.minder-host {
+  position: relative;
+  height: 600px;
+}
+</style>
+```
+
+For eager styling, import `vue-minder/style.css` in the application entry and
+only load the component JavaScript dynamically. KityMinder requires browser
+DOM APIs; SSR applications must place it behind a client-only boundary and run
+the dynamic import on the client.
+
+This loads the complete Vue Minder JavaScript/CSS chunks on demand. Internal
+`src/runtime/*` modules remain statically assembled into the library bundle and
+cannot be loaded individually.
 
 ## License
 
