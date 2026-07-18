@@ -6,9 +6,7 @@
  * @author: techird
  * @copyright: Baidu FEX, 2014
  */
-define(function(require, exports, module) {
-
-    var Hotbox = require('../hotbox');
+    import Hotbox from '../hotbox.js';
 
 
     // Nice: http://unixpapa.com/js/key.html
@@ -180,5 +178,4 @@ define(function(require, exports, module) {
         });
     }
 
-    return module.exports = JumpingRuntime;
-});
+    export default JumpingRuntime;

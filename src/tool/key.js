@@ -1,5 +1,4 @@
-define(function(require, exports, module) {
-    var keymap = require('./keymap');
+    import keymap from './keymap.js';
 
     var CTRL_MASK = 0x1000;
     var ALT_MASK = 0x2000;
@@ -14,8 +13,6 @@ define(function(require, exports, module) {
     function is(a, b) {
         return a && b && hash(a) == hash(b);
     }
-    exports.hash = hash;
-    exports.is = is;
 
 
     function hashKeyEvent(keyEvent) {
@@ -66,4 +63,6 @@ define(function(require, exports, module) {
         });
         return hashCode;
     }
-});
+
+    export { hash, is };
+    export default { hash, is };

@@ -3,13 +3,11 @@
  * @Editor: Naixor
  * @Date: 2015.9.21
  */
-define(function(require, exports, module) {
-
 	function ClipboardRuntime () {
 		var minder = this.minder;
 		var Data = window.kityminder.data;
 
-		if (!minder.supportClipboardEvent || kity.Browser.gecko) {
+		if (!minder.supportClipboardEvent || window.kity.Browser.gecko) {
 			return;
 		};
 
@@ -184,5 +182,4 @@ define(function(require, exports, module) {
         document.addEventListener('paste', beforePaste);	
 	}
 
-	return module.exports = ClipboardRuntime;
-});
+	export default ClipboardRuntime;

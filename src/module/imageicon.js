@@ -1,12 +1,9 @@
 var kity = window.kity;
-var utils = require('kityminder-core/src/core/utils');
-var Minder = window.kityminder.Minder;
-var MinderNode = window.kityminder.Node;
 var Command = window.kityminder.Command;
 var Module = window.kityminder.Module;
 var Renderer = window.kityminder.Render;
 
-module.exports = Module.register('imageicon', function() {
+export default Module.register('imageicon', function() {
   var self = this;
   
   function loadImageSize(url, callback) {

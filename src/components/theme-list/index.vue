@@ -25,6 +25,7 @@
 }
 </style>
 <script>
+import { markRaw } from "vue";
 import clickOutSide from "../../directives/clickoutside";
 
 export default {
@@ -76,10 +77,12 @@ export default {
   watch: {
     kityminder(v, oldV) {
       if(v !== oldV) {
-        this.minder = v
-        this.themeList = window.kityminder.Minder.getThemeList();
+        this.syncMinder(v);
       }
     }
+  },
+  mounted() {
+    this.syncMinder(this.kityminder);
   },
   methods: {
     hide() {
@@ -88,6 +91,16 @@ export default {
     getThemes() {
       if(window.kityminder.Minder) {
         return this.themeKeyList
+      }
+    },
+    syncTheme(key) {
+      this.value = key;
+    },
+    syncMinder(minder) {
+      this.minder = minder;
+      this.themeList = markRaw(window.kityminder.Minder.getThemeList());
+      if(this.minder) {
+        this.value = this.minder.queryCommandValue("theme");
       }
     },
     changeTheme(key, minder) {

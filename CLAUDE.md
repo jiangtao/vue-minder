@@ -2,13 +2,27 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Agent skills
+
+### Issue tracker
+
+项目需求、规格与 Wayfinder 决策票统一记录在 GitHub Issues。详见 `docs/agents/issue-tracker.md`。
+
+### Triage labels
+
+工程技能使用五类标准 triage 标签。详见 `docs/agents/triage-labels.md`。
+
+### Domain docs
+
+项目采用单一上下文的领域文档布局。详见 `docs/agents/domain.md`。
+
 ## Project Overview
 
 Vue Minder is a Vue.js wrapper around Baidu's KityMinder Core (百度脑图) - a mind mapping library. This project makes KityMinder easily usable within Vue 3.x ecosystems with Vue component integration.
 
 **Important**: This is now a Vue 3.x project (3.x branch). Historical versions:
 - **3.x branch** - Vue 3.x version (current, default)
-- **2.x branch** - Vue 2.x version
+- **2.x branch** - Vue 2.x line (unsupported)
 - **master branch** - Vue 1.x version (historical, no longer maintained)
 
 ## Development Commands
@@ -17,19 +31,23 @@ Vue Minder is a Vue.js wrapper around Baidu's KityMinder Core (百度脑图) - a
 # Development with hot reload (Vite dev server)
 npm run dev
 
-# Build styles (LESS -> CSS with gulp)
-npm run build:style
+# Test library and site build contracts
+npm test
 
-# Build for production
+# Build library and demo site
 npm run build
 
-# Preview production build
-npm run preview
+# Build only the publishable library
+npm run build:lib
+
+# Build only the Vercel demo site
+npm run build:site
+
+# Preview the production demo site
+npm run preview:site
 ```
 
-**Note**: `npm run dev` is the primary command for local development. It:
-1. Builds styles with gulp
-2. Starts Vite dev server with hot reload
+**Note**: `npm run dev` starts the Vite development server with hot reload. Vite compiles the LESS styles directly.
 
 ## Architecture
 
@@ -78,7 +96,8 @@ The main Vue component is `<minder>` (registered as `Minder` from `src/component
 ```vue
 <script setup>
 import { ref } from 'vue'
-import Minder from 'vue-minder'
+import { Minder } from 'vue-minder'
+import 'vue-minder/style.css'
 
 const minderRef = ref(null)
 
@@ -90,7 +109,7 @@ const exportData = () => {
 </script>
 
 <template>
-  <Minder ref="minderRef" />
+  <Minder ref="minderRef" :unique-index-fn="node => node.data.id" />
 </template>
 ```
 
@@ -121,7 +140,7 @@ const exportData = () => {
 ### Build System
 
 - **Vite 5.x** - Modern build tool for dev/prod
-- **Gulp** - LESS compilation and asset processing
+- **LESS 4.x** - Compiled directly by Vite
 - **@vitejs/plugin-vue** - Vue 3 SFC compilation
 - ES modules output with UMD fallback
 
@@ -151,7 +170,7 @@ Output:
 
 2. **Global Dependencies**: The editor exposes `window.minder` and `window.km` for debugging/external access
 
-3. **KityMinder Integration**: The core `kity` and `kityminder-core` libraries are bundled, while `hotbox` (context menu) is a dependency
+3. **KityMinder Integration**: `kity`, `kityminder-core`, and `hotbox` are bundled into the library output; Vue remains the peer dependency
 
 4. **Memory System**: Uses localStorage keys with suffixes:
    - `__EXPAND_MEMORY__{suffix}` - Node expand states

@@ -6,11 +6,8 @@
  * @author: techird
  * @copyright: Baidu FEX, 2014
  */
-define(function(require, exports, module) {
-
-    require('../tool/innertext');
-
-    var Debug = require('../tool/debug');
+    import '../tool/innertext.js';
+    import Debug from '../tool/debug.js';
     var debug = new Debug('input');
 
     function InputRuntime() {
@@ -391,5 +388,4 @@ define(function(require, exports, module) {
         }
     }
 
-    return module.exports = InputRuntime;
-});
+    export default InputRuntime;

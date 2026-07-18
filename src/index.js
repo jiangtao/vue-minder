@@ -1,22 +1,19 @@
-import kity from 'kity';
-import kityminder from 'kityminder-core';
+import 'kity';
+import 'kityminder-core';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Editor from './components/editor/index.vue';
 import './module/imageicon'
+import './styles/editor.less'
 
 const MindEditor = {
   Minder: Editor
 };
 
-const install = function(Vue, opts = {}) {
+const install = function(app) {
   Object.keys(MindEditor).forEach((key) => {
-    Vue.component(key, MindEditor[key]);
+    app.component(key, MindEditor[key]);
   });
 };
-
-// auto install
-if(typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue);
-}
 
 export default Object.assign(MindEditor, {install});
 export { Editor as Minder, install };

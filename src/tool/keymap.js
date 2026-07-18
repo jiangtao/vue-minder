@@ -1,4 +1,3 @@
-define(function(require, exports, module) {
     var keymap = {
 
         'Shift': 16,
@@ -78,5 +77,4 @@ define(function(require, exports, module) {
         keymap[n.toString()] = n + 48;
     } while (--n);
 
-    module.exports = keymap;
-});
+    export default keymap;

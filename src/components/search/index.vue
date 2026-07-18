@@ -1,5 +1,5 @@
 <template>
-  <div v-show="showSearch" id="search" class="search-box clearfix">
+  <div v-show="isSearchVisible" id="search" class="search-box clearfix">
     <div class="input-group input-group-sm search-input-wrap">
       <input type="text"
              ref="searchInputRef"
@@ -36,6 +36,9 @@
       }
     },
     watch: {
+      showSearch(value) {
+        this.isSearchVisible = value;
+      },
       kityminder(v, old) {
         if(v !== old) {
           this.minder = v;
@@ -52,7 +55,7 @@
         searchSequence: [],
         nodeSequence: [],
         direction: 'next',
-        showSearch: this.showSearch,
+        isSearchVisible: this.showSearch,
         minder: null
       };
     },
@@ -146,7 +149,7 @@
         this.minder?.fire('hidenoterequest');
       },
       enterSearch() {
-        this.showSearch = true;
+        this.isSearchVisible = true;
         this.$nextTick(() => {
           this.$refs.searchInputRef.focus();
           if(this.keyword) {

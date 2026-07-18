@@ -8,8 +8,7 @@
  */
 
 
-define(function(require, exports, module) {
-    var jsonDiff = require('../tool/jsondiff');
+    import jsonDiff from '../tool/jsondiff.js';
 
     function HistoryRuntime() {
         var minder = this.minder;
@@ -129,5 +128,4 @@ define(function(require, exports, module) {
 
     window.diff = jsonDiff;
 
-    return module.exports = HistoryRuntime;
-});
+    export default HistoryRuntime;

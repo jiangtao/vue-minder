@@ -8,8 +8,7 @@
  */
 
 
-define(function(require, exports, module) {
-    if ((!('innerText' in document.createElement('a'))) && ('getSelection' in window)) {
+if ((!('innerText' in document.createElement('a'))) && ('getSelection' in window)) {
         HTMLElement.prototype.__defineGetter__('innerText', function() {
             var selection = window.getSelection(),
                 ranges    = [],
@@ -50,5 +49,4 @@ define(function(require, exports, module) {
              */
             this.innerHTML = (text || '').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
         });
-    }
-});
+}

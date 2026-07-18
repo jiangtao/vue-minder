@@ -76,6 +76,7 @@
   }
 </style>
 <script>
+  import { markRaw } from 'vue';
   import memory from '../../services/memory';
   import config from '../../services/config';
   function bind(minder, ctx) {
@@ -237,7 +238,7 @@
     mounted() {
       this.$nextTick(() => {
         const ctx = this;
-        this.minder = window.minder;
+        this.minder = markRaw(window.minder);
         const scope = this;
         const minder = this.minder;
         window.minder.setDefaultOptions({zoom: config.get('zoom')});
@@ -265,7 +266,7 @@
          * */
 
         // 画布，渲染缩略图
-        this.paper = new kity.Paper(this.$refs.navPreviewer);
+        this.paper = markRaw(new window.kity.Paper(this.$refs.navPreviewer));
         var paper = this.paper;
 
         // 用两个路径来挥之节点和连线的缩略图

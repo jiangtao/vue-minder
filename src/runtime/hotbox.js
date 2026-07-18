@@ -6,8 +6,7 @@
  * @author: techird
  * @copyright: Baidu FEX, 2014
  */
-define(function(require, exports, module) {
-    var Hotbox = require('../hotbox');
+    import Hotbox from '../hotbox.js';
 
     function HotboxRuntime() {
         var fsm = this.fsm;
@@ -52,5 +51,4 @@ define(function(require, exports, module) {
         this.hotbox = hotbox;
     }
 
-    return module.exports = HotboxRuntime;
-});
+    export default HotboxRuntime;

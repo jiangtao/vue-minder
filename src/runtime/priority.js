@@ -1,5 +1,3 @@
-define(function(require, exports, module){
-
     function PriorityRuntime() {
         var minder = this.minder;
         var hotbox = this.hotbox;
@@ -46,6 +44,4 @@ define(function(require, exports, module){
 
     }
 
-    return module.exports = PriorityRuntime;
-
-});
+    export default PriorityRuntime;

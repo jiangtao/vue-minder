@@ -3,7 +3,6 @@
  * @Editor: Naixor
  * @Date: 2015.9.21
  */
-define(function(require, exports, module) {
 	function MimeType() {
 		/**
 		 * 私有变量
@@ -114,10 +113,9 @@ define(function(require, exports, module) {
 	}
 
 	function MimeTypeRuntime() {
-		if (this.minder.supportClipboardEvent && !kity.Browser.gecko) {
+		if (this.minder.supportClipboardEvent && !window.kity.Browser.gecko) {
 			this.MimeType = new MimeType();
 		};
 	}
 
-	return module.exports = MimeTypeRuntime;
-});
+	export default MimeTypeRuntime;

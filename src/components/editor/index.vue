@@ -29,9 +29,9 @@
   }
 </style>
 <script>
+  import { markRaw } from 'vue';
   import visible from "../../directives/visible.js";
 
-  import '../../filter/lang';
   import Editor from '../../editor';
   import Navigator from '../navigator/index.vue';
   import Search from '../search/index.vue';
@@ -145,10 +145,9 @@
           }
         }
 
-        editor.minder.importJson(this.getMemory(importData));
-
-        this.editor = editor;
-        this.minder = editor.minder;
+        this.editor = markRaw(editor);
+        this.minder = markRaw(editor.minder);
+        window.minder = window.km = editor.minder;
 
         editor.minder.on('contentchange', function() {
           var json = editor.minder.exportJson();
@@ -157,13 +156,15 @@
         editor.minder.on('import', function() {
           var json = editor.minder.exportJson();
           if(self.$refs.templateRef) {
-            self.$refs.templateRef.changeTemplate(json.template)
+            self.$refs.templateRef.syncTemplate(json.template)
           }
           if(self.$refs.themeRef) {
-            self.$refs.themeRef.changeTheme(json.theme)
+            self.$refs.themeRef.syncTheme(json.theme)
           }
         })
-        window.minder = window.km = editor.minder;
+        if(importData) {
+          editor.minder.importJson(this.getMemory(importData));
+        }
         if(!this.enable) this.minder.disable();
         this.lazy = true;
       });
@@ -246,7 +247,7 @@
         return this.minder.getSelectedNode();
       },
       getSelectedNodes() {
-        return this.minder.getSelectedNode();
+        return this.minder.getSelectedNodes();
       }
     }
   };

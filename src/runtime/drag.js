@@ -6,10 +6,8 @@
  * @author: techird
  * @copyright: Baidu FEX, 2014
  */
-define(function(require, exports, module) {
-
-    var Hotbox = require('../hotbox');
-    var Debug = require('../tool/debug');
+    import Hotbox from '../hotbox.js';
+    import Debug from '../tool/debug.js';
     var debug = new Debug('drag');
 
     function DragRuntime() {
@@ -136,5 +134,4 @@ define(function(require, exports, module) {
         }, false);
     }
 
-    return module.exports = DragRuntime;
-});
+    export default DragRuntime;

@@ -18,3 +18,5 @@ npm-debug.log
 *.log
 test/dist/
 dist/
+dist-site/
+.vercel/

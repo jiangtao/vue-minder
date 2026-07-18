@@ -1,5 +1,3 @@
-define(function(require, exports, module) {
-
     function NodeRuntime() {
         var runtime = this;
         var minder = this.minder;
@@ -108,5 +106,4 @@ define(function(require, exports, module) {
         //})
     }
 
-    return module.exports = NodeRuntime;
-});
+    export default NodeRuntime;

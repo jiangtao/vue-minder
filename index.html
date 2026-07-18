@@ -2,63 +2,18 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Vue Minder - Test Page</title>
+  <title>Vue Minder 3 - Vue 3 Mind Map Component</title>
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/styles/minder.css">
   <style>
+    html,
     body {
-      margin: 20px;
-    }
-    .test-info {
-      background: #f5f5f5;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 4px;
-    }
-    .test-info h2 {
-      margin-top: 0;
-      color: #333;
-    }
-    .test-list {
-      list-style: none;
-      padding-left: 0;
-    }
-    .test-list li {
-      padding: 8px 0;
-      border-bottom: 1px solid #ddd;
-    }
-    .test-list li:before {
-      content: "☐ ";
-      color: #2196F3;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-    .test-list li.passed:before {
-      content: "☑ ";
-      color: #4CAF50;
+      height: 100%;
+      margin: 0;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="test-info">
-      <h2>Vue Minder 3.0 - Test Page</h2>
-      <p>This is a test page for Vue 3 migration. Use this to verify all functionality works correctly.</p>
-      <ul class="test-list">
-        <li>Component renders correctly</li>
-        <li>Mind map loads with data</li>
-        <li>Search functionality works</li>
-        <li>Theme switching works</li>
-        <li>Template switching works</li>
-        <li>Navigator works</li>
-        <li>Memory/expand states persist</li>
-        <li>Events fire correctly</li>
-      </ul>
-      <p><strong>Dev Server:</strong> <code>http://localhost:10001</code></p>
-    </div>
-    <div id="app" style="border: 1px solid #ddd; border-radius: 4px; padding: 10px;"></div>
-  </div>
+  <div id="app"></div>
   <script type="module" src="/examples/main.js"></script>
 </body>
 </html>

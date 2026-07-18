@@ -1,6 +1,6 @@
 <template>
   <ul class="breadcrumb__list">
-    <li v-for="(index, item) in list">
+    <li v-for="(item, index) in list" :key="uniqueIndexFn(item) || index">
       <span :id="item.data.id" @click="showNode(item, $event)" class="item">{{item.data.name}}</span>
       <span v-if="index !== list.length - 1" class="arrow">&gt;</span>
     </li>
@@ -55,26 +55,28 @@
         minder: null,
         root: null,
         nodes: {},
-        lock: false
+        lock: false,
+        handleContentChange: null,
+        handleDoubleClick: null
       };
     },
-    ready() {
+    mounted() {
       this.$nextTick(() => {
         this.minder = window.minder;
-        this.minder.on('contentchange', (node) => {
+        this.handleContentChange = () => {
           this.root = this.minder.getRoot();
           this.getNodes(this.root);
-        });
-        this.minder.on('selectionchange', () => {
-          // nothing
-        });
-        this.minder.on('dblclick', () => {
+        };
+        this.handleDoubleClick = () => {
           const n = this.minder.getSelectedNode();
           if(n && !n.isLeaf() && n != this.root) {
             this.getBreadcrumb(n);
             this.importRoot(n);
           }
-        });
+        };
+        this.minder.on('contentchange', this.handleContentChange);
+        this.minder.on('dblclick', this.handleDoubleClick);
+        this.handleContentChange();
       });
     },
     methods: {
@@ -119,7 +121,11 @@
         this.lock = true;
       }
     },
-    beforeDestroy() {
+    beforeUnmount() {
+      if(this.minder) {
+        this.minder.off('contentchange', this.handleContentChange);
+        this.minder.off('dblclick', this.handleDoubleClick);
+      }
       this.nodes = {};
       this.list = [];
     }

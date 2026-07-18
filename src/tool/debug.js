@@ -6,8 +6,7 @@
  * @author: techird
  * @copyright: Baidu FEX, 2014
  */
-define(function(require, exports, module) {
-    var format = require('./format');
+    import format from './format.js';
 
     function noop() {}
 
@@ -42,5 +41,4 @@ define(function(require, exports, module) {
         }
     }
 
-    return module.exports = Debug;
-});
+    export default Debug;

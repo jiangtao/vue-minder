@@ -6,9 +6,7 @@
  * @author: techird
  * @copyright: Baidu FEX, 2014
  */
-define(function(require, exports, module) {
-
-    var Debug = require('../tool/debug');
+    import Debug from '../tool/debug.js';
     var debug = new Debug('fsm');
 
     function handlerConditionMatch(condition, when, exit, enter) {
@@ -117,5 +115,4 @@ define(function(require, exports, module) {
         this.fsm = new FSM('normal');
     }
 
-    return module.exports = FSMRumtime;
-});
+    export default FSMRumtime;

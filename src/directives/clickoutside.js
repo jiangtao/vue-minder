@@ -4,36 +4,22 @@
  */
 export default {
   mounted(el, binding) {
-    const vm = binding.instance;
-    const expression = binding.value;
-
+    el._clickOutsideCallback = binding.value;
     el._clickOutsideHandler = (e) => {
-      if (el.contains(e.target)) {
-        return false;
-      }
-      if (expression && vm && vm[expression]) {
-        vm[expression]();
+      if (!el.contains(e.target) && typeof el._clickOutsideCallback === 'function') {
+        el._clickOutsideCallback(e);
       }
     };
     document.addEventListener('click', el._clickOutsideHandler);
   },
   updated(el, binding) {
-    // Update the handler if the expression changes
-    const vm = binding.instance;
-    const expression = binding.value;
-
-    el._clickOutsideHandler = (e) => {
-      if (el.contains(e.target)) {
-        return false;
-      }
-      if (expression && vm && vm[expression]) {
-        vm[expression]();
-      }
-    };
+    el._clickOutsideCallback = binding.value;
   },
   unmounted(el) {
     if (el._clickOutsideHandler) {
       document.removeEventListener('click', el._clickOutsideHandler);
     }
+    delete el._clickOutsideCallback;
+    delete el._clickOutsideHandler;
   }
 };

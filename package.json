@@ -4,16 +4,29 @@
   "description": "Vue Kityminder - Vue 3 version",
   "main": "dist/minder.min.js",
   "module": "dist/minder.es.js",
+  "style": "dist/styles/minder.css",
   "exports": {
     ".": {
       "import": "./dist/minder.es.js",
       "require": "./dist/minder.min.js"
-    }
+    },
+    "./style.css": "./dist/styles/minder.css"
   },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "dev": "npm run build:style && vite",
-    "build": "npm run build:style && vite build",
-    "build:style": "gulp --gulpfile build/build-style.js",
+    "dev": "vite",
+    "build": "npm run build:lib && npm run build:site",
+    "build:lib": "vite build --mode library",
+    "build:site": "vite build --mode site",
+    "test": "npm run test:library && npm run test:site",
+    "test:library": "node --test test/library-build.test.mjs",
+    "test:site": "node --test test/site-build.test.mjs",
+    "preview:site": "vite preview --outDir dist-site",
     "preview": "vite preview"
   },
   "peerDependencies": {
@@ -22,18 +35,14 @@
   "dependencies": {
     "bootstrap": "^3.4.1",
     "core-js": "^2.4.1",
-    "hotbox": "fex-team/hotbox",
+    "hotbox": "https://codeload.github.com/fex-team/hotbox/tar.gz/440e62a01ae48bc0d5d6d6ed5379489a830fa967",
     "kity": "^2.0.4",
-    "kityminder-core": "github:jiangtao/kityminder-core",
+    "kityminder-core": "https://codeload.github.com/jiangtao/kityminder-core/tar.gz/3824603f47e3b5dce1ffcc4a3a35d215279601d6",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
-    "gulp-clean-css": "^4.3.0",
-    "gulp-less": "^4.0.1",
-    "gulp-rename": "^2.0.0",
+    "less": "^4.2.0",
     "vite": "^5.0.0",
     "vue": "^3.4.0"
   }

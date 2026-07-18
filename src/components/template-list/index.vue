@@ -6,7 +6,7 @@
       <span class="caret"></span>
     </div>
     <ul v-show="show" class="dropdown-menu temp-list">
-      <li v-for="(key, templateObj) in templateList" :key="key" class="temp-item-wrap">
+      <li v-for="key in templateKeys" :key="key" class="temp-item-wrap">
         <a @click="changeTemplate(key)" :class="['temp-item', key, { 'temp-item-selected': key == template }]"
            :title="key"></a>
       </li>
@@ -34,7 +34,7 @@
     data() {
       return {
         minder: this.kityminder,
-        templateList: null,
+        templateKeys: [],
         show: false,
         template: null
       };
@@ -51,6 +51,16 @@
       },
       getTemplate() {
         return this.template
+      },
+      syncTemplate(key) {
+        this.template = key;
+      },
+      syncMinder(minder) {
+        this.minder = minder;
+        this.templateKeys = this.getTemplates().filter(key => key !== 'tianpan');
+        if(this.minder) {
+          this.template = this.minder.queryCommandValue('template');
+        }
       },
       changeTemplate(key, minder) {
         if(minder) {
@@ -77,14 +87,12 @@
     watch: {
       kityminder(v, oldV) {
         if(v !== oldV) {
-          this.minder = v
-          if(this.minder) {
-            const templateList = kityminder.Minder.getTemplateList();
-            delete templateList.tianpan;
-            this.templateList = templateList;
-          }
+          this.syncMinder(v);
         }
       }
+    },
+    mounted() {
+      this.syncMinder(this.kityminder);
     }
   };
 </script>

@@ -8,7 +8,6 @@
  */
 
 
-define(function(require, exports, module) {
     /*!
     * https://github.com/Starcounter-Jack/Fast-JSON-Patch
     * json-patch-duplex.js 0.5.0
@@ -87,5 +86,4 @@ define(function(require, exports, module) {
         return patches;
     }
 
-    return module.exports = compare;
-});
+    export default compare;

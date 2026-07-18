@@ -1,6 +1,21 @@
 /**
  * 运行时
  */
+import ContainerRuntime from './runtime/container.js'
+import FSMRuntime from './runtime/fsm.js'
+import MinderRuntime from './runtime/minder.js'
+import ReceiverRuntime from './runtime/receiver.js'
+import HotboxRuntime from './runtime/hotbox.js'
+import InputRuntime from './runtime/input.js'
+import ClipboardMimeTypeRuntime from './runtime/clipboard-mimetype.js'
+import ClipboardRuntime from './runtime/clipboard.js'
+import DragRuntime from './runtime/drag.js'
+import NodeRuntime from './runtime/node.js'
+import HistoryRuntime from './runtime/history.js'
+import JumpingRuntime from './runtime/jumping.js'
+import PriorityRuntime from './runtime/priority.js'
+import ProgressRuntime from './runtime/progress.js'
+
 var runtimes = [];
 
 function assemble(runtime) {
@@ -18,19 +33,21 @@ function KMEditor(selector, blackList) {
 
 KMEditor.assemble = assemble;
 
-assemble(require('./runtime/container'));
-assemble(require('./runtime/fsm'));
-assemble(require('./runtime/minder'));
-assemble(require('./runtime/receiver'));
-assemble(require('./runtime/hotbox'));
-assemble(require('./runtime/input'));
-assemble(require('./runtime/clipboard-mimetype'));
-assemble(require('./runtime/clipboard'));
-assemble(require('./runtime/drag'));
-assemble(require('./runtime/node'));
-assemble(require('./runtime/history'));
-assemble(require('./runtime/jumping'));
-assemble(require('./runtime/priority'));
-assemble(require('./runtime/progress'));
+[
+    ContainerRuntime,
+    FSMRuntime,
+    MinderRuntime,
+    ReceiverRuntime,
+    HotboxRuntime,
+    InputRuntime,
+    ClipboardMimeTypeRuntime,
+    ClipboardRuntime,
+    DragRuntime,
+    NodeRuntime,
+    HistoryRuntime,
+    JumpingRuntime,
+    PriorityRuntime,
+    ProgressRuntime
+].forEach(assemble);
 
 export default KMEditor;

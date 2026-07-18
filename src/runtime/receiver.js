@@ -7,8 +7,7 @@
  * @copyright: Baidu FEX, 2014
  */
 
-define(function(require, exports, module) {
-    var key = require('../tool/key');
+    import key from '../tool/key.js';
 
     function ReceiverRuntime() {
         var fsm = this.fsm;
@@ -140,6 +139,4 @@ define(function(require, exports, module) {
         this.receiver = receiver;
     }
 
-    return module.exports = ReceiverRuntime;
-
-});
+    export default ReceiverRuntime;
