@@ -8,7 +8,7 @@ import { tmpdir } from 'node:os'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
-test('Vue 3 consumers receive complete browser-ready library artifacts', () => {
+test('Vue 3.2.25 consumers can dynamically load complete library artifacts', () => {
   const build = spawnSync('npm', ['run', 'build:lib'], {
     cwd: projectRoot,
     encoding: 'utf8'
@@ -42,7 +42,6 @@ test('Vue 3 consumers receive complete browser-ready library artifacts', () => {
     assert.equal(packed.status, 0, `${packed.stdout}\n${packed.stderr}`)
 
     const [{ filename }] = JSON.parse(packed.stdout)
-    const vueVersion = packageLock.packages['node_modules/vue'].version
     const viteVersion = packageLock.packages['node_modules/vite'].version
     writeFileSync(resolve(consumerRoot, 'package.json'), JSON.stringify({
       private: true,
@@ -56,7 +55,7 @@ test('Vue 3 consumers receive complete browser-ready library artifacts', () => {
       '--no-audit',
       '--no-fund',
       resolve(consumerRoot, filename),
-      `vue@${vueVersion}`,
+      'vue@3.2.25',
       `vite@${viteVersion}`
     ], {
       cwd: consumerRoot,
@@ -65,14 +64,23 @@ test('Vue 3 consumers receive complete browser-ready library artifacts', () => {
     assert.equal(install.status, 0, `${install.stdout}\n${install.stderr}`)
 
     writeFileSync(resolve(consumerRoot, 'index.html'), '<div id="app"></div><script type="module" src="/main.js"></script>')
-    writeFileSync(resolve(consumerRoot, 'main.js'), `
-      import { createApp, h } from 'vue'
+    // Keep the package import inside the lazy chunk so Vite validates both
+    // named and default exports without moving the editor into the entry chunk.
+    writeFileSync(resolve(consumerRoot, 'load-minder.js'), `
       import VueMinder, { Minder } from 'vue-minder'
-      import 'vue-minder/style.css'
+      export { Minder, VueMinder }
+    `)
+    writeFileSync(resolve(consumerRoot, 'main.js'), `
+      import { createApp, defineAsyncComponent, h } from 'vue'
 
-      if (typeof VueMinder.install !== 'function' || !Minder) {
-        throw new Error('Vue Minder exports are incomplete')
-      }
+      const Minder = defineAsyncComponent(async () => {
+        await import('vue-minder/style.css')
+        const module = await import('./load-minder.js')
+        if (typeof module.VueMinder.install !== 'function' || !module.Minder) {
+          throw new Error('Vue Minder exports are incomplete')
+        }
+        return module.Minder
+      })
 
       const data = {
         root: { data: { id: 1, name: 'Consumer root' }, children: [] },
@@ -86,23 +94,34 @@ test('Vue 3 consumers receive complete browser-ready library artifacts', () => {
           style: { width: '800px', height: '500px' }
         })
       })
-      app.use(VueMinder)
       app.mount('#app')
     `)
 
-    const consumerBuild = spawnSync(resolve(consumerRoot, 'node_modules/.bin/vite'), ['build'], {
+    const consumerBuild = spawnSync(resolve(consumerRoot, 'node_modules/.bin/vite'), ['build', '--manifest'], {
       cwd: consumerRoot,
       encoding: 'utf8'
     })
     assert.equal(consumerBuild.status, 0, `${consumerBuild.stdout}\n${consumerBuild.stderr}`)
 
     const consumerAssets = readdirSync(resolve(consumerRoot, 'dist/assets'))
-    const consumerCss = consumerAssets.find((file) => file.endsWith('.css'))
-    const consumerJs = consumerAssets.find((file) => file.endsWith('.js'))
-    assert.ok(consumerCss, 'consumer build should include the exported CSS')
-    assert.ok(consumerJs, 'consumer build should include the component runtime')
-    assert.ok(statSync(resolve(consumerRoot, 'dist/assets', consumerCss)).size > 100_000, 'consumer CSS should include Bootstrap and editor styles')
-    assert.ok(statSync(resolve(consumerRoot, 'dist/assets', consumerJs)).size > 100_000, 'consumer JS should include the editor runtime')
+    const consumerHtml = readFileSync(resolve(consumerRoot, 'dist/index.html'), 'utf8')
+    const manifest = JSON.parse(readFileSync(resolve(consumerRoot, 'dist/.vite/manifest.json'), 'utf8'))
+    const entryChunk = Object.values(manifest).find((chunk) => chunk.isEntry)
+    const minderChunk = manifest['load-minder.js']
+    const styleChunk = manifest['node_modules/vue-minder/dist/styles/minder.css']
+    const consumerCss = consumerAssets.filter((file) => file.endsWith('.css'))
+    const consumerJs = consumerAssets.filter((file) => file.endsWith('.js'))
+    const totalCssSize = consumerCss.reduce((size, file) => size + statSync(resolve(consumerRoot, 'dist/assets', file)).size, 0)
+    const totalJsSize = consumerJs.reduce((size, file) => size + statSync(resolve(consumerRoot, 'dist/assets', file)).size, 0)
+    assert.ok(entryChunk?.isEntry, `consumer entry is missing from manifest: ${JSON.stringify(manifest)}`)
+    assert.ok(entryChunk.dynamicImports?.includes('load-minder.js'), `consumer entry does not lazy-load the editor: ${JSON.stringify(manifest)}`)
+    assert.ok(minderChunk?.isDynamicEntry, `editor is not a dynamic entry: ${JSON.stringify(manifest)}`)
+    assert.ok(statSync(resolve(consumerRoot, 'dist', minderChunk.file)).size > 100_000, 'dynamic editor chunk should contain the runtime')
+    assert.ok(styleChunk?.file.endsWith('.css'), `editor CSS is missing from manifest: ${JSON.stringify(manifest)}`)
+    assert.ok(consumerCss.length > 0, 'consumer build should include the dynamically imported CSS')
+    assert.doesNotMatch(consumerHtml, /\.css/, 'dynamically imported CSS should not be linked eagerly from HTML')
+    assert.ok(totalCssSize > 100_000, 'consumer CSS should include Bootstrap and editor styles')
+    assert.ok(totalJsSize > 100_000, 'consumer JS should include the editor runtime')
   } finally {
     rmSync(consumerRoot, { recursive: true, force: true })
   }
