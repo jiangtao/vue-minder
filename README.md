@@ -2,7 +2,8 @@
 
 Vue Minder 将百度脑图的 KityMinder Core 封装为 Vue 组件，用于在 Vue 应用中编辑和展示思维导图。
 
-> 当前维护方向为 Vue 3。由于前端技术栈迭代较快，Vue 2 版本暂不支持，也没有可安装的 2.x 正式版本；旧版 `master` 仅作为 Vue 1 历史代码保留。
+> 当前默认与维护方向为 Vue 3：`master` 和 `3.x` 均承载 Vue 3 代码。Vue 1
+> 历史代码固定保留在 `vue-1.x-final` tag；Vue 2 停止支持。
 
 ## 中文使用说明
 
@@ -10,9 +11,10 @@ Vue Minder 将百度脑图的 KityMinder Core 封装为 Vue 组件，用于在 V
 
 | 分支 / 版本 | Vue 版本 | 状态 |
 | --- | --- | --- |
-| `3.x` | Vue 3 | 当前开发与维护版本 |
+| `master` | Vue 3.2.25–3.x | 默认分支与当前稳定代码 |
+| `3.x` | Vue 3.2.25–3.x | Vue 3 发布与维护分支 |
 | `2.x` | Vue 2 | 暂不支持，不建议使用 |
-| `master` / 1.x | Vue 1 | 历史版本，不再维护 |
+| `vue-1.x-final` tag | Vue 1 | 历史快照，不再维护 |
 
 ### 当前可用状态
 
@@ -27,17 +29,22 @@ Vue Minder 将百度脑图的 KityMinder Core 封装为 Vue 组件，用于在 V
 精确的 Vue `3.0.x` 不能使用当前产物：新版 Vue SFC 编译器生成的运行时辅助函数
 在 Vue 3.0 中尚不存在。请先将宿主应用升级到 Vue `3.2.25` 或更高的 Vue 3.x 版本。
 
-目前 `3.x` 尚未发布到 npm，所以“可用”是指可以从 `3.x` 分支构建并安装本地包，
-不能直接把 npm 上的 `vue-minder@latest` 当作 Vue 3 版本使用。
+Vue 3 正式包发布为 `vue-minder@3.0.0`，`latest` 指向当前 Vue 3 稳定版本。
 
 ### 安装
 
-3.x 尚未发布到 npm。请先从源码构建本地安装包：
+直接从 npm 安装 Vue 3 版本：
 
 ```bash
-git clone --branch 3.x --single-branch https://github.com/jiangtao/vue-minder.git
+npm install vue-minder@^3
+```
+
+如需从源码构建本地安装包：
+
+```bash
+git clone https://github.com/jiangtao/vue-minder.git
 cd vue-minder
-npm install
+npm ci
 npm run build:lib
 npm pack
 ```
@@ -47,14 +54,6 @@ npm pack
 ```bash
 npm install /path/to/vue-minder/vue-minder-3.0.0.tgz
 ```
-
-3.x 正式发布后可改用：
-
-```bash
-npm install vue-minder@^3
-```
-
-在 3.x 发布前，请不要使用 `vue-minder@latest` 安装 Vue 3 版本；npm 上当前的 latest 仍可能指向历史版本。
 
 ### 局部注册组件（推荐）
 
@@ -266,7 +265,9 @@ npm run preview:site # 本地预览生产站点
 
 ## English Usage Guide
 
-Vue Minder wraps Baidu's KityMinder Core as a Vue mind-map editor. Vue 3 is the active development line. Vue 2 is currently unsupported, and `master` is retained only as the historical Vue 1 line.
+Vue Minder wraps Baidu's KityMinder Core as a Vue mind-map editor. Vue 3 is
+the active line on both `master` and `3.x`. Vue 1 is preserved by the
+`vue-1.x-final` tag, and Vue 2 is unsupported.
 
 ### Current status
 
@@ -279,17 +280,23 @@ Vue `3.0.x` is not compatible with the current bundle because it does not
 provide runtime helpers emitted by the modern Vue SFC compiler. Upgrade the
 host application to Vue `3.2.25` or a newer Vue 3.x release.
 
-Version 3 has not been published to npm yet. Build and install a tarball from
-the `3.x` branch instead of assuming that `vue-minder@latest` is the Vue 3 line.
+The Vue 3 package is published as `vue-minder@3.0.0`, and `latest` points to
+the current stable Vue 3 release.
 
 ### Installation
 
-Version 3 has not been published to npm yet. Build a local package from the `3.x` branch:
+Install the Vue 3 package from npm:
 
 ```bash
-git clone --branch 3.x --single-branch https://github.com/jiangtao/vue-minder.git
+npm install vue-minder@^3
+```
+
+To build a local package from source:
+
+```bash
+git clone https://github.com/jiangtao/vue-minder.git
 cd vue-minder
-npm install
+npm ci
 npm run build:lib
 npm pack
 ```
@@ -299,8 +306,6 @@ Install the generated tarball in your Vue 3 application:
 ```bash
 npm install /path/to/vue-minder/vue-minder-3.0.0.tgz
 ```
-
-After the official release, use `npm install vue-minder@^3`. Until then, do not assume that `vue-minder@latest` provides Vue 3.
 
 ### Local component registration
 
